@@ -1,13 +1,15 @@
+#
+#   Karl's qtile config
+#   telegram: @linuxkarl615
+#
 from libqtile import bar, layout, widget, hook
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 import subprocess, os
 from os.path import expanduser
 from theme import theme_colors
-#from libqtile.utils import guess_terminal
 
 mod = "mod4"
-#terminal = guess_terminal()
 terminal = "alacritty"
 dmenu = "rofi -show drun"
 browser = "firefox"
@@ -43,25 +45,24 @@ keys = [
     # Split = all windows displayed
     # Unsplit = 1 window displayed, like Max layout, but still with
     # multiple stack panes
-    Key(
-        [mod, "shift"],
-        "Return",
-        lazy.layout.toggle_split(),
-        desc="Toggle between split and unsplit sides of stack",
-        ),
-    # setup some key bindings
-    Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
-    Key([mod], "d", lazy.spawn(dmenu), desc="Launch dmenu"),
-    Key([mod], "e", lazy.spawn(fileman), desc="Launch file manager"),
-    Key([mod], "f", lazy.spawn(browser), desc="Launch web browser"),
-
+    Key([mod, "shift"], "Return", lazy.layout.toggle_split(),
+        desc="Toggle between split and unsplit sides of stack"),
     # Toggle between different layouts as defined below
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
     Key([mod], "w", lazy.window.kill(), desc="Kill focused window"),
     Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
-    ]
+    
+    # setup some app key bindings
+    Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
+    Key([mod], "d", lazy.spawn(dmenu), desc="Launch dmenu"),
+    Key([mod], "e", lazy.spawn(fileman), desc="Launch file manager"),
+    Key([mod], "f", lazy.spawn(browser), desc="Launch web browser"),
+    Key([mod], "n", lazy.spawn("nvim-qt"), desc="Launch my editor of choice"),
+    Key([mod], "m", lazy.spawn("dex /usr/share/applications/spotify-adblock.desktop"), 
+        desc="Launch spotify"),
+]
 
 # Set up our groups and bind their respective keys, got a few workarounds
 # in effect since we're using these fancy icons
