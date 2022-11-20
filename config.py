@@ -8,11 +8,14 @@ from libqtile.lazy import lazy
 import subprocess, os
 from os.path import expanduser
 from theme import theme_colors
+from qtile_extras.widget import alsavolumecontrol #, visualiser
 
 mod = "mod4"
-terminal = "alacritty"
-dmenu = "rofi -show drun"
+terminal = "kitty"
+aterminal = "alacritty"
+dmenu = "rofi -modi drun,window,combi -combi drun,window -show combi"
 browser = "firefox"
+palemoon = "palemoon"
 fileman = "dolphin"
 
 keys = [
@@ -53,12 +56,14 @@ keys = [
     Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
-    
+
     # setup some app key bindings
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
+    Key([mod, "shift"], "Return", lazy.spawn(aterminal), desc="Launch alternate terminal"),
     Key([mod], "d", lazy.spawn(dmenu), desc="Launch dmenu"),
     Key([mod], "e", lazy.spawn(fileman), desc="Launch file manager"),
-    Key([mod], "f", lazy.spawn(browser), desc="Launch web browser"),
+    Key([mod], "f", lazy.spawn(browser), desc="Launch firefox web browser"),
+    Key([mod], "p", lazy.spawn(palemoon), desc="Launch palemoon web browser"),
     Key([mod], "n", lazy.spawn("nvim-qt"), desc="Launch my editor of choice"),
     Key([mod], "m", lazy.spawn("dex /usr/share/applications/spotify-adblock.desktop"), 
         desc="Launch spotify"),
@@ -72,22 +77,22 @@ groups = []
 for n in group_names:
     name=n[:1]
     match(name):
-        case '1'|'2':
+        case '1'|'2'|'6':
             groups.append(Group(n, layout='max'))
-        case '3'|'9':
+        case '3':
             groups.append(Group(n, layout='treetab'))
-        case '4'|'5':
+        case '4'|'5'|'9':
             groups.append(Group(n, layout='floating'))
         case _:
             groups.append(Group(n, layout='monadtall'))
 # now bind the keys using the first char in each group name
 for g in groups:
     keys.extend([
-        Key([mod], g.name[:1], lazy.group[g.name].toscreen(), 
+        Key([mod], g.name[:1], lazy.group[g.name].toscreen(),
             desc="Switch to group {}".format(g.name)),
-        Key([mod, "shift"], g.name[:1], lazy.window.togroup(g.name,switch_group=True), 
+        Key([mod, "shift"], g.name[:1], lazy.window.togroup(g.name,switch_group=True),
             desc="Move current container to group {}".format(g.name)),
-        ])
+    ])
 
 # Configure the layouts variable
 layouts = [
@@ -97,7 +102,7 @@ layouts = [
         max_ratio=0.8,
         min_ratio=0.5,
         change_ratio=0.05,
-        ),
+    ),
     layout.TreeTab(
         fontsize=11,
         sections=["TreeTab"],
@@ -110,8 +115,9 @@ layouts = [
         section_bottom=20,
         level_shift=8,
         vspace=3,
-        panel_width=200
-        ),
+        panel_width=200,
+        bg_color='#000000d9',
+    ),
     layout.Tile(),
     layout.Floating(),
     # layout.Stack(num_stacks=2),
@@ -124,12 +130,13 @@ layouts = [
     # layout.TreeTab(),
     # layout.VerticalTile(),
     # layout.Zoomy(),
-    ]
+]
 
 widget_defaults = dict(
-    font="NotoSerif Nerd Font",
+    font="Ubuntu Nerd Font",
     fontsize=16,
-    )
+    theme_path='~/.config/qtile/icons',
+)
 extension_defaults = widget_defaults.copy()
 
 screens = [
@@ -145,7 +152,7 @@ screens = [
                     padding=2,
                     margin_x=2,
                     margin_y=2,
-                    ),
+                ),
                 widget.GroupBox(
                     name="GroupBoxTop",
                     margin_y=4,
@@ -167,7 +174,7 @@ screens = [
                     background=theme_colors[0],
                     disable_drag=True,
                     markup=True,
-                    ),
+                ),
                 widget.CurrentLayoutIcon(
                     custom_icon_paths=[expanduser("~/.config/qtile/icons")],
                     foreground=theme_colors[9],
@@ -176,7 +183,7 @@ screens = [
                     margin_x=4,
                     margin_y=4,
                     scale=0.7,
-                    ),
+                ),
                 widget.Prompt(),
                 widget.WindowName(),
                 widget.Chord(
@@ -184,40 +191,42 @@ screens = [
                         "launch": ("#ff0000", "#ffffff"),
                         },
                         name_transform=lambda name: name.upper(),
-                    ),
+                ),
                 #widget.TextBox("&lt;MOD-r&gt; to spawn cmd", foreground="#d75f5f"),
                 widget.Systray(
                     icon_size=23,
-                    padding=2,
-                    padding_x=4,
-                    ),
+                    margin=6,
+                ),
+                #widget.CapsNumLockIndicator(),
+                #widget.CPUGraph(width=50,),
+                alsavolumecontrol.ALSAWidget(mode='icon'),
+                #visualiser.Visualiser(),
                 widget.Clock(
-                    font='OpenDyslexic',
-                    fontsize=22,
+                    fontsize=18,
                     format="%I:%M",
                     padding=4,
                     padding_left=5,
-                    ),
+                ),
                 widget.TextBox(
-                    fontsize=26,
+                    fontsize=22,
                     mouse_callbacks={'Button1': lazy.shutdown()},
                     text="ﮊ",
                     padding=2,
                     margin_x=2,
-                    ),
-                ],
+                ),
+            ],
             26,
             background=theme_colors[0],
-            ),
         ),
-    ]
+    ),
+]
 
 # Drag floating layouts.
 mouse = [
     Drag([mod], "Button1", lazy.window.set_position_floating(), start=lazy.window.get_position()),
     Drag([mod], "Button3", lazy.window.set_size_floating(), start=lazy.window.get_size()),
     Click([mod], "Button2", lazy.window.bring_to_front()),
-    ]
+]
 
 #dgroups_key_binder = None
 #dgroups_app_rules = []  # type: list
@@ -237,12 +246,12 @@ floating_layout = layout.Floating(
         Match(wm_class="dunst"),
         Match(wm_class="gimp"),
         Match(wm_class="keepassxc"),
-        Match(wm_class="telegram-desktop"),
+        #Match(wm_class="telegram-desktop"),
         Match(wm_class="kvantummanager"),
         Match(wm_class="qt5ct"),
         Match(wm_class="lxappearance"),
-        ]
-    )
+    ]
+)
 
 auto_fullscreen = True
 focus_on_window_activation = "smart"
@@ -263,11 +272,11 @@ def dialogs(window):
 
 @hook.subscribe.startup_once
 def autostart():
-    home = expanduser('~/.config/qtile/autostart.sh')
+    home = expanduser('~/.config/qtile/autostart.zsh')
     subprocess.call([home])
     os.environ['QT_QPA_PLATFORMTHEME']='qt5ct'
     os.environ['EDITOR']='nvim-qt'
 
 # We choose LG3D to maximize irony: it is a 3D non-reparenting WM written in
 # java that happens to be on java's whitelist.
-wmname = "LG3D"
+wmname = "qtile"
