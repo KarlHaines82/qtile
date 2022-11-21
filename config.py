@@ -8,7 +8,7 @@ from libqtile.lazy import lazy
 import subprocess, os
 from os.path import expanduser
 from theme import theme_colors
-from qtile_extras.widget import alsavolumecontrol #, visualiser
+from qtile_extras.widget import alsavolumecontrol, statusnotifier #, visualiser
 
 mod = "mod4"
 terminal = "kitty"
@@ -192,13 +192,17 @@ screens = [
                         },
                         name_transform=lambda name: name.upper(),
                 ),
-                #widget.TextBox("&lt;MOD-r&gt; to spawn cmd", foreground="#d75f5f"),
-                widget.Systray(
-                    icon_size=23,
-                    margin=6,
-                ),
                 #widget.CapsNumLockIndicator(),
-                #widget.CPUGraph(width=50,),
+                widget.CheckUpdates(),
+                widget.WidgetBox(
+                    widgets=[
+                        widget.CPUGraph(width=50),
+                        widget.MemoryGraph(width=50),
+                        widget.HDDBusyGraph(width=50),
+                    ]
+                ),
+                #widget.Systray(icon_size=22),
+                statusnotifier.StatusNotifier(icon_size=22),
                 alsavolumecontrol.ALSAWidget(mode='icon'),
                 #visualiser.Visualiser(),
                 widget.Clock(
@@ -208,9 +212,9 @@ screens = [
                     padding_left=5,
                 ),
                 widget.TextBox(
-                    fontsize=22,
+                    fontsize=20,
                     mouse_callbacks={'Button1': lazy.shutdown()},
-                    text="ﮊ",
+                    text="",
                     padding=2,
                     margin_x=2,
                 ),
