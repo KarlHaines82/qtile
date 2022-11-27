@@ -3,7 +3,7 @@ from libqtile.lazy import lazy
 from libqtile.config import Screen
 from os.path import expanduser
 from theme import theme_colors
-import custom_widgets
+import mywidgets
 from qtile_extras.widget import statusnotifier, alsavolumecontrol
 
 scrns = [
@@ -61,7 +61,7 @@ scrns = [
                 ),
                 widget.CheckUpdates(),
                 #widget.CapsNumLockIndicator(),
-                custom_widgets.CapsNumWidget(),
+                mywidgets.CapsNumWidget(),
                 widget.WidgetBox(
                     widgets=[
                         widget.CPUGraph(width=50),

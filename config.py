@@ -2,20 +2,19 @@
 #   Karl's qtile config
 #   telegram: @linuxkarl615
 #
-from libqtile import bar, layout, widget, hook
-from libqtile.config import Click, Drag, Group, Key, Match, Screen
+from libqtile import layout, widget, hook
+from libqtile.config import Click, Drag, Group, Key, Match
 from libqtile.lazy import lazy
 import subprocess, os
 from os.path import expanduser
 from theme import theme_colors
-from qtile_extras.widget import alsavolumecontrol, statusnotifier #, visualiser
+import myscreens
 
 mod = "mod4"
 terminal = "kitty"
 aterminal = "alacritty"
 dmenu = "rofi -modi drun,window,combi -combi drun,window -show combi"
 browser = "firefox"
-palemoon = "palemoon"
 fileman = "dolphin"
 
 keys = [
@@ -48,25 +47,21 @@ keys = [
     # Split = all windows displayed
     # Unsplit = 1 window displayed, like Max layout, but still with
     # multiple stack panes
-    Key([mod, "shift"], "Return", lazy.layout.toggle_split(),
-        desc="Toggle between split and unsplit sides of stack"),
+    Key([mod, "shift"], "Return", lazy.layout.toggle_split(), desc="Toggle between split and unsplit sides of stack"),
     # Toggle between different layouts as defined below
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
     Key([mod], "w", lazy.window.kill(), desc="Kill focused window"),
     Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
-
     # setup some app key bindings
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
     Key([mod, "shift"], "Return", lazy.spawn(aterminal), desc="Launch alternate terminal"),
     Key([mod], "d", lazy.spawn(dmenu), desc="Launch dmenu"),
     Key([mod], "e", lazy.spawn(fileman), desc="Launch file manager"),
     Key([mod], "f", lazy.spawn(browser), desc="Launch firefox web browser"),
-    Key([mod], "p", lazy.spawn(palemoon), desc="Launch palemoon web browser"),
     Key([mod], "n", lazy.spawn("nvim-qt"), desc="Launch my editor of choice"),
-    Key([mod], "m", lazy.spawn("dex /usr/share/applications/spotify-adblock.desktop"), 
-        desc="Launch spotify"),
+    Key([mod], "m", lazy.spawn("dex /usr/share/applications/spotify-adblock.desktop"), desc="Launch spotify"),
 ]
 
 # Set up our groups and bind their respective keys, got a few workarounds
@@ -88,8 +83,7 @@ for n in group_names:
 # now bind the keys using the first char in each group name
 for g in groups:
     keys.extend([
-        Key([mod], g.name[:1], lazy.group[g.name].toscreen(),
-            desc="Switch to group {}".format(g.name)),
+        Key([mod], g.name[:1], lazy.group[g.name].toscreen(), desc="Switch to group {}".format(g.name)),
         Key([mod, "shift"], g.name[:1], lazy.window.togroup(g.name,switch_group=True),
             desc="Move current container to group {}".format(g.name)),
     ])
@@ -116,118 +110,25 @@ layouts = [
         level_shift=8,
         vspace=3,
         panel_width=200,
-        bg_color='#000000d9',
+        bg_color="#000000d9",
     ),
     layout.Tile(),
     layout.Floating(),
-    # layout.Stack(num_stacks=2),
-    # layout.Bsp(),
-    # layout.Matrix(),
-    # layout.MonadTall(),
-    # layout.MonadWide(),
-    # layout.RatioTile(),
-    # layout.Tile(),
-    # layout.TreeTab(),
-    # layout.VerticalTile(),
-    # layout.Zoomy(),
 ]
 
 widget_defaults = dict(
     font="Ubuntu Nerd Font",
     fontsize=16,
-    theme_path='~/.config/qtile/icons',
+    theme_path=expanduser('~/.config/qtile/icons'),
 )
 extension_defaults = widget_defaults.copy()
 
-screens = [
-    Screen(
-        top=bar.Bar(
-            [
-                widget.Image(
-                    filename=expanduser("~/.config/qtile/icons/arch01.png"),
-                    mouse_callbacks={'Button1': lazy.spawn("/usr/bin/kitty")},
-                    background=theme_colors[0],
-                    width=18,
-                    height=18,
-                    padding=2,
-                    margin_x=2,
-                    margin_y=2,
-                ),
-                widget.GroupBox(
-                    name="GroupBoxTop",
-                    margin_y=4,
-                    margin_x=0,
-                    padding_y=0,
-                    padding_x=0,
-                    borderwidth=3,
-                    active=theme_colors[-2],
-                    inactive=theme_colors[-1],
-                    rounded=True,
-                    highlight_method='line',
-                    urgent_alert_method='block',
-                    urgent_border=theme_colors[8],
-                    this_current_screen_border=theme_colors[9],
-                    this_screen_border=theme_colors[4],
-                    other_current_screen_border=theme_colors[0],
-                    other_screen_border=theme_colors[0],
-                    foreground=theme_colors[11],
-                    background=theme_colors[0],
-                    disable_drag=True,
-                    markup=True,
-                ),
-                widget.CurrentLayoutIcon(
-                    custom_icon_paths=[expanduser("~/.config/qtile/icons")],
-                    foreground=theme_colors[9],
-                    background=theme_colors[0],
-                    padding=5,
-                    margin_x=4,
-                    margin_y=4,
-                    scale=0.7,
-                ),
-                widget.Prompt(),
-                widget.WindowName(),
-                widget.Chord(
-                    chords_colors={
-                        "launch": ("#ff0000", "#ffffff"),
-                        },
-                        name_transform=lambda name: name.upper(),
-                ),
-                #widget.CapsNumLockIndicator(),
-                widget.CheckUpdates(),
-                widget.WidgetBox(
-                    widgets=[
-                        widget.CPUGraph(width=50),
-                        widget.MemoryGraph(width=50),
-                        widget.HDDBusyGraph(width=50),
-                    ]
-                ),
-                #widget.Systray(icon_size=22),
-                statusnotifier.StatusNotifier(icon_size=22),
-                alsavolumecontrol.ALSAWidget(mode='icon'),
-                #visualiser.Visualiser(),
-                widget.Clock(
-                    fontsize=18,
-                    format="%I:%M",
-                    padding=4,
-                    padding_left=5,
-                ),
-                widget.TextBox(
-                    fontsize=20,
-                    mouse_callbacks={'Button1': lazy.shutdown()},
-                    text="",
-                    padding=2,
-                    margin_x=2,
-                ),
-            ],
-            26,
-            background=theme_colors[0],
-        ),
-    ),
-]
+screens = myscreens.scrns
 
 # Drag floating layouts.
 mouse = [
     Drag([mod], "Button1", lazy.window.set_position_floating(), start=lazy.window.get_position()),
+    Drag([mod, "control"], "Button1", lazy.window.set_size_floating(), start=lazy.window.get_size()),
     Drag([mod], "Button3", lazy.window.set_size_floating(), start=lazy.window.get_size()),
     Click([mod], "Button2", lazy.window.bring_to_front()),
 ]
@@ -276,8 +177,8 @@ def dialogs(window):
 
 @hook.subscribe.startup_once
 def autostart():
-    home = expanduser('~/.config/qtile/autostart.zsh')
-    subprocess.call([home])
+    run_autostart = expanduser('~/.config/qtile/autostart.sh')
+    subprocess.call([run_autostart])
     os.environ['QT_QPA_PLATFORMTHEME']='qt5ct'
     os.environ['EDITOR']='nvim-qt'
 
