@@ -92,7 +92,7 @@ screens = [
             30,
             background=theme_colors[0],
         ),
-        wallpaper_mode='FILL',
-        wallpaper=expanduser('~/.config/qtile/bg.jpg'),
+        wallpaper_mode='STRETCH',
+        wallpaper='~/.config/qtile/bg.jpg',
     ),
 ]
