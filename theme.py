@@ -9,7 +9,6 @@ theme_colors = [
     ["#8d62a9", "#8d62a9"],
     ["#668bd7", "#668bd7"],  # color for the even widgets
     ["#e1acff", "#e1acff"],  # window name
-
     ["#000000", "#000000"],
     ["#AD343E", "#AD343E"],
     ["#f76e5c", "#f76e5c"],

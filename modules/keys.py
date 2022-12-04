@@ -48,11 +48,13 @@ keys = [
     Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
     # setup some app key bindings
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
+    Key([mod, "mod1"], "Return", lazy.spawn(terminal + " -e tmux"), desc="Launch terminal with a new tmux session"),
     Key([mod, "shift"], "Return", lazy.spawn(aterminal), desc="Launch alternate terminal"),
     Key([mod], "d", lazy.spawn(dmenu), desc="Launch dmenu"),
     Key([mod], "e", lazy.spawn(fileman), desc="Launch file manager"),
+    Key([mod], "n", lazy.spawn("neovide-lunarvim"), desc="Launch my editor of choice"),
+    Key([mod], "b", lazy.spawn("brave"), desc="Launch brave web browser"),
     Key([mod], "f", lazy.spawn(browser), desc="Launch firefox web browser"),
-    Key([mod], "n", lazy.spawn("nvim-qt"), desc="Launch my editor of choice"),
     Key([mod], "m", lazy.spawn("dex /usr/share/applications/spotify-adblock.desktop"), desc="Launch spotify"),
     Key([mod], "t", lazy.spawn(telegram), desc="Launch telegram"),
 ]

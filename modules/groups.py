@@ -1,4 +1,4 @@
-from libqtile.config import Group, Key
+from libqtile.config import Group, Key, ScratchPad, DropDown
 from libqtile.lazy import lazy
 from modules import keys
 
@@ -16,11 +16,11 @@ for n in group_names:
             groups.append(Group(n, layout='max'))
         case '3':
             groups.append(Group(n, layout='treetab'))
-        case '4'|'5'|'9':
+        case '4'|'5'|'8':
             groups.append(Group(n, layout='floating'))
         case _:
-            groups.append(Group(n, layout='monadtall'))
-# now bind the keys using the first char in each group name
+            groups.append(Group(n, layout='floating'))
+
 
 # now bind the keys using the first char in each group name
 for g in groups:
@@ -29,3 +29,25 @@ for g in groups:
         Key([mod, "shift"], g.name[:1], lazy.window.togroup(g.name,switch_group=True),
             desc="Move current container to group {}".format(g.name)),
     ])
+
+
+# Setup ScratchPad group with 2 dropdowns
+groups.extend([
+    ScratchPad("scratchpad", [
+        # define a drop down terminal.
+        # it is placed in the upper third of screen by default.
+        DropDown("term", "alacritty", width=0.8, height=0.6, opacity=0.9),
+
+        # define another terminal exclusively for ``qtile shell` at different position
+        DropDown("qtile-shell", "alacritty --hold -e qtile shell",
+                 x=0.05, y=0.4, width=0.9, height=0.6, opacity=0.9,on_focus_lost_hide=True),
+        ]),
+    Group("0"),
+])
+
+keys.keys.extend([
+    # toggle visibiliy of above defined DropDown named "term"
+    Key([mod], 'F10', lazy.group['scratchpad'].dropdown_toggle('term')),
+    Key([mod, 'shift'], 'F10', lazy.group['scratchpad'].dropdown_toggle('qtile-shell')),
+])
+

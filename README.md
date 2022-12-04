@@ -4,9 +4,6 @@ Welcome, and thanks for being interested. After much experimentation and
 many hours of reading documentation and pure hacking as well, this is
 probably the 3rd complete revamp I've done concerning my qtile configuration.
 
-![screenie1](https://github.com/KarlHaines82/qtile-dots/blob/f67754971460821d7a3eff20cb2db0a2ca01c566/Screenshot_20221130_125627.png)
-![screenie2](https://github.com/KarlHaines82/qtile-dots/blob/f67754971460821d7a3eff20cb2db0a2ca01c566/Screenshot_20221130_130648.png)
-
 I'm somewhat of a minimalist, but I do like some transparency and some
 nerd fonts and whatnot, so this is what I've come up with. A very small
 config that suits me perfectly.

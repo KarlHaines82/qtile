@@ -1,4 +1,5 @@
 from libqtile import hook
+from libqtile.lazy import lazy
 from os.path import expanduser
 from os import environ
 import subprocess
@@ -15,3 +16,8 @@ def autostart():
     subprocess.call([run_autostart])
     environ['QT_QPA_PLATFORMTHEME']='qt5ct'
     environ['EDITOR']='nvim-qt'
+
+@hook.subscribe.screens_reconfigured
+def screen_reconfig():
+    # resolution likely changed, killing all conky sessions and restarting
+    subprocess.call(['killall conky &&', expanduser('~/.config/conky/startconky.sh')])
