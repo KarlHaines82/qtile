@@ -15,7 +15,7 @@ from modules.mouse import mouse
 from modules.hooks import *
 
 widget_defaults = dict(
-    font="FontAwesome",
+    font="Ubuntu Nerd Font",
     fontsize=16,
     custom_icon_paths=[
         expanduser("~/.config/qtile/icons"),

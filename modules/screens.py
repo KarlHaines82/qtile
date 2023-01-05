@@ -61,25 +61,18 @@ screens = [
                     name_transform=lambda name: name.upper(),
                 ),
                 mywidgets.CapsNumWidget(),
-                widget.WidgetBox(
-                    widgets=[
-                        widget.CPUGraph(width=60),
-                        widget.MemoryGraph(width=60),
-                        widget.HDDBusyGraph(width=60),
-                    ],
-                ),
-                widget.Systray(
+                #widget.Systray(
+                #    icon_size=22,
+                #), 
+                statusnotifier.StatusNotifier(
                     icon_size=22,
-                ), 
-                #statusnotifier.StatusNotifier(
-                #    icon_size=22,
-                #),
+                ),
                 brightnesscontrol.BrightnessControl(),
-                #alsavolumecontrol.ALSAWidget(
-                #    icon_size=22,
-                #    mode='icon',
-                #    theme_path=expanduser('~/.config/qtile/icons'),
-                #),
+                alsavolumecontrol.ALSAWidget(
+                    icon_size=22,
+                    mode='icon',
+                    theme_path=expanduser('~/.config/qtile/icons'),
+                ),
                 upower.UPowerWidget(),
                 widget.Clock(
                     fontsize=20,
@@ -97,7 +90,7 @@ screens = [
             30,
             background=theme_colors[0],
         ),
-        #wallpaper_mode='STRETCH',
-        #wallpaper='/usr/share/endeavouros/backgrounds/eos_wallpapers_community/EOS-SPACE-4K.png',
+        wallpaper_mode='stretch',
+        wallpaper='/usr/share/endeavouros/backgrounds/eos_wallpapers_community/EOS-SPACE-4K.png',
     ),
 ]
