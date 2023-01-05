@@ -1,24 +1,32 @@
-#
+# -------------------------------------------------
 #   Karl's qtile config
-#   telegram: @linuxkarl615
-#
-import os
+#   telegram: @linuxkarl
+# -------------------------------------------------
+from os import environ
 from os.path import expanduser
-from libqtile.lazy import lazy
+
+from libqtile.log_utils import logger
+
 from modules.keys import keys, mod
-from modules.hooks import * 
 from modules.groups import groups
 from modules.layouts import layouts, floating_layout
 from modules.screens import screens
 from modules.mouse import mouse
-#from modules.scratchpad import *
+from modules.hooks import *
 
 widget_defaults = dict(
-    font="GE Inspira",
+    font="FontAwesome",
     fontsize=16,
-    custom_icon_paths=[expanduser("~/.config/qtile/icons"),expanduser("~/.icons")],
+    custom_icon_paths=[
+        expanduser("~/.config/qtile/icons"),
+        expanduser("~/.local/share/icons"),
+    ],
 )
 extension_defaults = widget_defaults.copy()
+
+# environment variables
+environ['QT_QPA_PLATFORMTHEME'] = 'qt5ct'
+environ['NEOVIDE_MULTIGRID'] = 'true'
 
 auto_fullscreen = True
 auto_minimize = False
@@ -29,3 +37,5 @@ follow_mouse_focus = True
 reconfigure_screens = True
 wl_input_rules = None
 wmname = "qtile"
+
+logger.debug('Config loaded')

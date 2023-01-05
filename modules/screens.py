@@ -3,6 +3,8 @@ from libqtile.lazy import lazy
 from libqtile import bar, widget
 from os.path import expanduser
 from theme import theme_colors
+from qtile_extras.widget import brightnesscontrol, upower
+from qtile_extras.widget import statusnotifier, alsavolumecontrol
 import mywidgets
 
 screens = [
@@ -66,25 +68,27 @@ screens = [
                         widget.HDDBusyGraph(width=60),
                     ],
                 ),
-                #widget.StatusNotifier(
-                #    icon_size=22,
-                #    icon_theme='Shiny-Color-Dark-Icons',
-                #),
                 widget.Systray(
                     icon_size=22,
-                    icon_theme='Shiny-Color-Dark-Icons',
-                ),
-                #widget.PulseVolume(),
+                ), 
+                #statusnotifier.StatusNotifier(
+                #    icon_size=22,
+                #),
+                brightnesscontrol.BrightnessControl(),
+                #alsavolumecontrol.ALSAWidget(
+                #    icon_size=22,
+                #    mode='icon',
+                #    theme_path=expanduser('~/.config/qtile/icons'),
+                #),
+                upower.UPowerWidget(),
                 widget.Clock(
-                    fontsize=18,
+                    fontsize=20,
                     format="%I:%M",
                     padding=4,
                 ),
                 widget.TextBox(
-
                     fontsize=20,
                     mouse_callbacks={'Button1': lazy.shutdown()},
-                    font="UbuntuMono Nerd Font",
                     text=" ",
                     padding=2,
                     margin_x=2,
@@ -93,7 +97,7 @@ screens = [
             30,
             background=theme_colors[0],
         ),
-        wallpaper_mode='STRETCH',
-        wallpaper='~/.config/qtile/bg2.png',
+        #wallpaper_mode='STRETCH',
+        #wallpaper='/usr/share/endeavouros/backgrounds/eos_wallpapers_community/EOS-SPACE-4K.png',
     ),
 ]

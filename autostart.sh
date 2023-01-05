@@ -1,5 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 nitrogen --restore &
-~/.config/conky/startconky.sh &
+#~/.config/conky/startconky.sh &
 dunst &
-dex -ae qtile &
+dex -ae qtile -s ~/.config/autostart &
+

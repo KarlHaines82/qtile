@@ -36,18 +36,17 @@ groups.extend([
     ScratchPad("scratchpad", [
         # define a drop down terminal.
         # it is placed in the upper third of screen by default.
-        DropDown("term", "alacritty", width=0.8, height=0.6, opacity=0.9),
+        DropDown("term", "alacritty --option window.opacity=0.95 --option font.size=9.0", width=0.8, height=0.6, opacity=0.9),
 
-        # define another terminal exclusively for ``qtile shell` at different position
+        # define another terminal exclusively for ``qtile9 shell` at different position
         DropDown("qtile-shell", "alacritty --hold -e qtile shell",
                  x=0.05, y=0.4, width=0.9, height=0.6, opacity=0.9,on_focus_lost_hide=True),
         ]),
-    Group("0"),
 ])
 
 keys.keys.extend([
     # toggle visibiliy of above defined DropDown named "term"
-    Key([mod], 'F10', lazy.group['scratchpad'].dropdown_toggle('term')),
-    Key([mod, 'shift'], 'F10', lazy.group['scratchpad'].dropdown_toggle('qtile-shell')),
+    Key([], 'F11', lazy.group['scratchpad'].dropdown_toggle('term')),
+    Key([mod], 'F11', lazy.group['scratchpad'].dropdown_toggle('qtile-shell')),
 ])
 

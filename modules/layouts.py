@@ -23,7 +23,7 @@ layouts = [
         level_shift=8,
         vspace=3,
         panel_width=200,
-        bg_color="#000000d9",
+        bg_color="#000000B9",
     ),
     layout.Tile(),
     layout.Floating(),
