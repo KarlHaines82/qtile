@@ -2,19 +2,42 @@ from libqtile.config import Key
 from libqtile.lazy import lazy
 
 mod = "mod4"
-editor = "neovide"
-terminal = "alacritty"
-aterminal = "kitty"
+editor = "nvim-qt"
+aterminal = "alacritty"
+terminal = "kitty"
 dmenu = "rofi -modi run,window,combi -combi run,window -show combi"
 browser = "chromium"
 firefox = "firefox"
-fileman = "pcmanfm-qt"
-afileman = "dolphin"
+afileman = "pcmanfm-qt"
+fileman = "dolphin"
 telegram = "telegram-desktop"
 
 keys = [
     # A list of available commands that can be bound to keys can be found
     # at https://docs.qtile.org/en/latest/manual/config/lazy.html
+    # setup some app key bindings
+    # TODO: add hotkeys for any user applications here
+    #
+    Key([mod], "Return", lazy.spawn(terminal), 
+        desc="Launch terminal"),
+    Key([mod, "mod1"], "Return", lazy.spawn(aterminal), 
+        desc="Launch alternate terminal"),
+    Key([mod], "d", lazy.spawn(dmenu), desc="Launch dmenu"),
+    Key([mod, "mod1"], "e", lazy.spawn(afileman), 
+        desc="Launch alternate file manager"),
+    Key([mod], "e", lazy.spawn(fileman), 
+        desc="Launch file manager"),
+    Key([mod], "n", lazy.spawn(editor), 
+        desc="Launch my editor of choice"),
+    Key([mod], "b", lazy.spawn(browser), 
+        desc="Launch chromium web browser"),
+    Key([mod], "f", lazy.spawn(firefox), 
+        desc="Launch firefox web browser"),
+    Key([mod], "m", lazy.spawn("dex /usr/share/applications/spotify-adblock.desktop"), 
+        desc="Launch spotify"),
+    Key([mod], "t", lazy.spawn(telegram), 
+        desc="Launch telegram"),
+    
     # Switch between windows
     Key([mod], "h", lazy.layout.left(), 
         desc="Move focus to left"),
@@ -73,27 +96,4 @@ keys = [
         desc="Shutdown Qtile"),
     Key([mod], "r", lazy.spawncmd(), 
         desc="Spawn a command using a prompt widget"),
-    #
-    # setup some app key bindings
-    # TODO: add hotkeys for any user applications here
-    #
-    Key([mod], "Return", lazy.spawn(terminal), 
-        desc="Launch terminal"),
-    Key([mod, "mod1"], "Return", lazy.spawn(aterminal), 
-        desc="Launch alternate terminal"),
-    Key([mod], "d", lazy.spawn(dmenu), desc="Launch dmenu"),
-    Key([mod, "mod1"], "e", lazy.spawn(afileman), 
-        desc="Launch alternate file manager"),
-    Key([mod], "e", lazy.spawn(fileman), 
-        desc="Launch file manager"),
-    Key([mod], "n", lazy.spawn(editor), 
-        desc="Launch my editor of choice"),
-    Key([mod], "b", lazy.spawn(browser), 
-        desc="Launch chromium web browser"),
-    Key([mod], "f", lazy.spawn(firefox), 
-        desc="Launch firefox web browser"),
-    Key([mod], "m", lazy.spawn("dex /usr/share/applications/spotify-adblock.desktop"), 
-        desc="Launch spotify"),
-    Key([mod], "t", lazy.spawn(telegram), 
-        desc="Launch telegram"),
 ]

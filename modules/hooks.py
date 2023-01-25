@@ -13,5 +13,5 @@ def dialogs(window):
 
 @hook.subscribe.startup_once
 def autostart():
-    run_autostart = expanduser('~/.config/qtile/autostart.sh')
+    run_autostart = expanduser("~/.config/qtile/autostart.sh")
     subprocess.call([run_autostart])

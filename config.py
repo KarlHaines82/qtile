@@ -1,21 +1,16 @@
-# -------------------------------------------------
-#   Karl's qtile config
-#   telegram: @linuxkarl
-# -------------------------------------------------
+# pyright: reportMissingImports=false
 from os import environ
 from os.path import expanduser
-
 from libqtile.log_utils import logger
-
+from modules.hooks import *
 from modules.keys import keys, mod
 from modules.groups import groups
 from modules.layouts import layouts, floating_layout
 from modules.screens import screens
 from modules.mouse import mouse
-from modules.hooks import *
 
 widget_defaults = dict(
-    font="Ubuntu Nerd Font",
+    font="CaskaydiaCove Nerd Font SemiLight",
     fontsize=16,
     custom_icon_paths=[
         expanduser("~/.config/qtile/icons"),
@@ -23,7 +18,6 @@ widget_defaults = dict(
     ],
 )
 extension_defaults = widget_defaults.copy()
-
 # environment variables
 environ['QT_QPA_PLATFORMTHEME'] = 'qt5ct'
 environ['NEOVIDE_MULTIGRID'] = 'true'

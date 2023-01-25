@@ -6,7 +6,7 @@ mod = "mod4"
 
 # Set up our groups and bind their respective keys, got a few workarounds
 # in effect since we're using these fancy icons
-group_names = ["1  ", "2  ", "3  ", "4  ", "5  ", "6  ", "7  ", "8  ", "9  "]
+group_names = ["1 ", "2 ", "3 ", "4 ", "5 ", "6 ", "7 ", "8 ", "9 "]
 # Set some default layouts
 groups = []
 for n in group_names:

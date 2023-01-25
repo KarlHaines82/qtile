@@ -3,12 +3,13 @@ from libqtile.config import Match
 from theme import theme_colors
 
 layouts = [
-    layout.Max(),
+    layout.Max(margin=20),
     layout.MonadTall(
         ratio=0.75,
         max_ratio=0.8,
         min_ratio=0.5,
         change_ratio=0.05,
+        margin=20,
     ),
     layout.TreeTab(
         fontsize=11,
@@ -24,8 +25,9 @@ layouts = [
         vspace=3,
         panel_width=200,
         bg_color="#000000B9",
+        margin=20,
     ),
-    layout.Tile(),
+    layout.Tile(margin=20),
     layout.Floating(),
 ]
 floating_layout = layout.Floating(
