@@ -1,6 +1,9 @@
 # cheetsheets
 mod4-*.png
 
+# my backgrounds
+background*.jpg
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 **/__pycache__/**
