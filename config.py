@@ -10,7 +10,7 @@ from modules.screens import screens
 from modules.mouse import mouse
 
 widget_defaults = dict(
-    font="CaskaydiaCove Nerd Font SemiLight",
+    font="Tinos Nerd Font",
     fontsize=16,
     custom_icon_paths=[
         expanduser("~/.config/qtile/icons"),

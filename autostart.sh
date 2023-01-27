@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 # ---
 # Use "run program" to run it only if it is not already running
 # Use "program &" to run it regardless
@@ -14,9 +14,7 @@ function run {
 }
 run picom
 run blueman-applet
-run nm-tray
-~/.config/conky/restartconky.sh &
+~/.config/conky/startconky.sh &
 run dunst
-dex -ae qtile -s ~/.config/autostart &
-run xsettingsd
-
+run qlipper
+dex -ae qtile -s $HOME/.config/autostart &

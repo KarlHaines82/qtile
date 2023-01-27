@@ -4,7 +4,8 @@ from libqtile import bar, widget
 from os.path import expanduser
 from theme import theme_colors
 from qtile_extras.widget import brightnesscontrol, upower
-from qtile_extras.widget import statusnotifier, alsavolumecontrol
+from qtile_extras.widget import alsavolumecontrol
+from qtile_extras.widget import statusnotifier
 import mywidgets
 
 ssep = {
@@ -33,8 +34,8 @@ screens = [
                 ),
                 widget.GroupBox(
                     name="GroupBoxTop",
-                    font='CaskaydiaCove Nerd Font SemiLight',
-                    fontsize=16,
+                    font="CaskaydiaCove Nerd Font SemiLight",
+                    fontsize=18,
                     margin_y=2,
                     margin_x=0,
                     padding_y=2,
@@ -75,16 +76,11 @@ screens = [
                 widget.Sep(**ssep),
                 widget.TextBox(
                     fontsize=22,
+                    font="CaskaydiaCove Nerd Font SemiLight",
 					text="\uE0C5",
                     foreground=theme_colors[11],
                     background=theme_colors[0],
                     margin_x=4,
-                    padding=0,
-                ),
-                widget.TextBox(
-                    text=" ",
-                    background=theme_colors[11],
-                    foreground=theme_colors[9],
                     padding=0,
                 ),
                 widget.Image(
@@ -100,11 +96,12 @@ screens = [
                     background=theme_colors[11],
                     padding=0,
                     margin_x=4,
-                    format=" {load_percent}%",
+                    format="{load_percent}%",
                     width=45
                 ),
                 widget.TextBox(
                     fontsize=22,
+                    font="CaskaydiaCove Nerd Font SemiLight",
 					text=" \uE0C5",
                     background=theme_colors[11],
                     foreground=theme_colors[4],
@@ -133,6 +130,7 @@ screens = [
                 ),
                 widget.TextBox(
                     fontsize=22,
+                    font="CaskaydiaCove Nerd Font SemiLight",
                     text=" \uE0C5",
                     background=theme_colors[4],
                     foreground=theme_colors[8],
@@ -145,6 +143,7 @@ screens = [
                 ),
                 widget.TextBox(
                     fontsize=22,
+                    font="CaskaydiaCove Nerd Font SemiLight",
 					text="\uE0C5",
                     background=theme_colors[8],
                     foreground=theme_colors[0],
@@ -152,9 +151,6 @@ screens = [
                     padding=0,
                 ),
                 widget.Sep(**ssep),
-                #widget.Systray(
-                #    icon_size=18,
-                #), 
                 statusnotifier.StatusNotifier(
                     icon_size=24,
                     icon_theme=expanduser('~/.local/share/icons/McMojave-circle-blue-dark/'),
@@ -162,11 +158,6 @@ screens = [
                     margin_x=2,
                 ),
                 brightnesscontrol.BrightnessControl(),
-                # alsavolumecontrol.ALSAWidget(
-                #     icon_size=18,
-                #     mode='both',
-                #     theme_path=expanduser('~/.config/qtile/icons'),
-                # ),
                 upower.UPowerWidget(),
                 widget.Clock(
                     font="OpenDyslexic Nerd Font",
@@ -183,10 +174,10 @@ screens = [
                     margin_y=2,
                 ),
             ],
-            32,
+            28,
             background=theme_colors[0],
         ),
         wallpaper_mode='stretch',
-        wallpaper=expanduser('~/.config/qtile/icons/background.png'),
+        wallpaper=expanduser('~/.config/qtile/background.jpg'),
     ),
 ]

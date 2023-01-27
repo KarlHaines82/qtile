@@ -33,7 +33,7 @@ keys = [
         desc="Launch chromium web browser"),
     Key([mod], "f", lazy.spawn(firefox), 
         desc="Launch firefox web browser"),
-    Key([mod], "m", lazy.spawn("dex /usr/share/applications/spotify-adblock.desktop"), 
+    Key([mod], "s", lazy.spawn("dex /usr/share/applications/spotify-adblock.desktop"), 
         desc="Launch spotify"),
     Key([mod], "t", lazy.spawn(telegram), 
         desc="Launch telegram"),
@@ -77,7 +77,7 @@ keys = [
     Key([mod], "m", lazy.layout.shrink(), 
         desc="Shrink window size ratio by .05"),
     Key([mod], "o", lazy.layout.maximize()),
-    Key([mod], "n", lazy.layout.normalize(), 
+    Key([mod, "shift"], "n", lazy.layout.normalize(), 
         desc="Reset all window sizes"),
     # Toggle between split and unsplit sides of stack.
     # Split = all windows displayed
