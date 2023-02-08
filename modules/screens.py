@@ -1,183 +1,215 @@
-from libqtile.config import Screen, Bar
+# from json import decoder
+from libqtile.config import Screen
+from libqtile import bar
 from libqtile.lazy import lazy
-from libqtile import bar, widget
-from os.path import expanduser
-from theme import theme_colors
-from qtile_extras.widget import brightnesscontrol, upower
-from qtile_extras.widget import alsavolumecontrol
+from qtile_extras import widget
 from qtile_extras.widget import statusnotifier
-import mywidgets
+from qtile_extras.widget.decorations import \
+        PowerLineDecoration as powerline_decor
+from os.path import expanduser
+from .theme import palette as theme_colors
+# from powerline.bindings.qtile import widget as qtile_widget
+# from powerline.bindings.qtile.widget import QTilePowerline
+# from .mywidgets import CapsNumWidget
+# from powerline import Powerline
+
 
 ssep = {
-    'background': "#292d3e",
-    'foreground': '#ffffff',
     'padding': 8,
-    'linewidth': 0,
 }
+
+powerline_right = {
+    "decorations": [
+        powerline_decor(),
+        powerline_decor(path="arrow_right")
+    ]
+}
+powerline_left = {
+    "decorations": [
+        powerline_decor(),
+        powerline_decor(path="arrow_left")
+    ]
+}
+b_powerline_right = {
+    "decorations": [
+        powerline_decor(),
+        powerline_decor(path="arrow_right")
+    ]
+}
+b_powerline_left = {
+    "decorations": [
+        powerline_decor(),
+        powerline_decor(path="arrow_left")
+    ]
+}
+
 
 screens = [
     Screen(
-        top=bar.Bar(
-            [
-                widget.Image(
-                    filename=expanduser("~/.config/qtile/icons/arch01.png"),
-                    mouse_callbacks={
-                        'Button1': lazy.spawn(
-                            "rofi -modi combi,window,drun -combi window,drun -show drun")
-                    },
-                    background=theme_colors[0],
-                    width=18,
-                    height=18,
-                    padding=5,
-                    margin=2,
-                    scale=0.7,
-                ),
-                widget.GroupBox(
-                    name="GroupBoxTop",
-                    font="CaskaydiaCove Nerd Font SemiLight",
-                    fontsize=18,
-                    margin_y=2,
-                    margin_x=0,
-                    padding_y=2,
-                    padding_x=2,
-                    borderwidth=3,
-                    active=theme_colors[-2],
-                    inactive=theme_colors[-1],
-                    rounded=True,
-                    highlight_method='line',
-                    urgent_alert_method='block',
-                    urgent_border=theme_colors[8],
-                    this_current_screen_border=theme_colors[9],
-                    this_screen_border=theme_colors[4],
-                    other_current_screen_border=theme_colors[0],
-                    other_screen_border=theme_colors[0],
-                    foreground=theme_colors[11],
-                    background=theme_colors[0],
-                    disable_drag=True,
-                    markup=True,
-                ),
-                widget.CurrentLayoutIcon(
-                    custom_icon_paths=[expanduser("~/.config/qtile/icons")],
-                    foreground=theme_colors[9],
-                    background=theme_colors[0],
-                    padding=5,
-                    margin_x=4,
-                    margin_y=4,
-                    scale=0.7,
-                ),
-                widget.Prompt(),
-                widget.WindowName(),
-                widget.Chord(
-                    chords_colors={
-                        "launch": ("#ff0000", "#ffffff"),
-                    },
-                    name_transform=lambda name: name.upper(),
-                ),
-                widget.Sep(**ssep),
-                widget.TextBox(
-                    fontsize=22,
-                    font="CaskaydiaCove Nerd Font SemiLight",
-					text="\uE0C5",
-                    foreground=theme_colors[11],
-                    background=theme_colors[0],
-                    margin_x=4,
-                    padding=0,
-                ),
-                widget.Image(
-                    filename=expanduser(
-                        "~/.config/qtile/icons/cpu.svg"),
-                    width=18,
-                    height=18,
-                    margin_x=4,
-                    background=theme_colors[11]
-                ),
-                widget.CPU(
-                    foreground=theme_colors[0],
-                    background=theme_colors[11],
-                    padding=0,
-                    margin_x=4,
-                    format="{load_percent}%",
-                    width=45
-                ),
-                widget.TextBox(
-                    fontsize=22,
-                    font="CaskaydiaCove Nerd Font SemiLight",
-					text=" \uE0C5",
-                    background=theme_colors[11],
-                    foreground=theme_colors[4],
-                    margin_x=4,
-                    padding=0,
-                ),
-                widget.Sep(
-                    background=theme_colors[4],
-                    padding = 5,
-                ),
-                widget.Image(
-                    filename=expanduser(
-                        "~/.config/qtile/icons/gnome-dev-memory.svg"),
-                    width=18,
-                    height=18,
-                    margin_x=4,
-                    background=theme_colors[4],
-                ),
-                widget.Memory(
-                    foreground="#ffffff",
-                    background=theme_colors[4],
-                    mouse_callbacks={'Button1': lazy.spawn('kitty btop')},
-                    padding=0,
-                    margin_x=4,
-                    measure_mem='G',
-                ),
-                widget.TextBox(
-                    fontsize=22,
-                    font="CaskaydiaCove Nerd Font SemiLight",
-                    text=" \uE0C5",
-                    background=theme_colors[4],
-                    foreground=theme_colors[8],
-                    padding=0,
-                    margin_x=4,
-                ),
-                mywidgets.CapsNumWidget(
-                    background=theme_colors[8],
-                    margin_x=8,
-                ),
-                widget.TextBox(
-                    fontsize=22,
-                    font="CaskaydiaCove Nerd Font SemiLight",
-					text="\uE0C5",
-                    background=theme_colors[8],
-                    foreground=theme_colors[0],
-                    margin_x=4,
-                    padding=0,
-                ),
-                widget.Sep(**ssep),
-                statusnotifier.StatusNotifier(
-                    icon_size=24,
-                    icon_theme=expanduser('~/.local/share/icons/McMojave-circle-blue-dark/'),
-                    padding=2,
-                    margin_x=2,
-                ),
-                brightnesscontrol.BrightnessControl(),
-                upower.UPowerWidget(),
-                widget.Clock(
-                    font="OpenDyslexic Nerd Font",
-                    fontsize=22,
-                    format="%I:%M",
-                    padding=4,
-                    margin_y=4,
-                ),
-                widget.TextBox(
-                    fontsize=22,
-                    mouse_callbacks={'Button1': lazy.shutdown()},
-                    text="",
-                    padding_x=0,
-                    margin_y=2,
-                ),
-            ],
-            28,
+        top=bar.Bar([
+            widget.Image(
+                **powerline_left,
+                filename=expanduser("~/.config/qtile/icons/arch01.png"),
+                mouse_callbacks={
+                    'Button1': lazy.spawn("rofi -modi combi,window,drun \
+                        -combi window,drun -show drun")
+                },
+                height=18,
+                padding=5,
+                margin=2,
+                scale=0.7,
+                background=theme_colors[16],
+            ),
+            widget.GroupBox(
+                **powerline_left,
+                name="GroupBoxTop",
+                font="CaskaydiaCove Nerd Font SemiLight",
+                fontsize=14,
+                background=theme_colors[8],
+                active=theme_colors[20],
+                inactive=theme_colors[18],
+                rounded=True,
+                highlight_method='block',
+                urgent_alert_method='line',
+                urgent_border="#0a0",
+                this_current_screen_border=theme_colors[17],
+                this_screen_border=theme_colors[17],
+                other_current_screen_border=theme_colors[20],
+                other_screen_border=theme_colors[3],
+                disable_drag=True,
+                markup=True,
+                padding=2,
+                margin=3
+
+            ),
+            widget.CurrentLayoutIcon(
+                custom_icon_paths=[expanduser("~/.config/qtile/icons")],
+                background=theme_colors[3],
+                padding=5,
+                margin_x=4,
+                margin_y=4,
+                scale=0.7,
+                **powerline_left,
+            ),
+            widget.Spacer(width=bar.STRETCH, **powerline_right),
+            widget.Prompt(),
+            widget.Chord(
+                chords_colors={
+                    "launch": ("#ff0000", "#ffffff"),
+                },
+                name_transform=lambda name: name.upper(),
+                **powerline_right,
+            ),
+            widget.Image(
+                filename=expanduser(
+                    "~/.config/qtile/icons/cpu.svg"),
+                height=14,
+                background=theme_colors[5],
+                padding=4,
+            ),
+            widget.CPU(
+                background=theme_colors[5],
+                format="{load_percent}%",
+                font="Tinos Nerd Font Bold",
+                fontsize=12,
+                width=46,
+                align="right",
+            ),
+            widget.CPUGraph(
+                **powerline_right,
+                background=theme_colors[5],
+                width=60,
+                margin_x=10,
+                type="line",
+                line_width=1,
+                border=0,
+            ),
+            widget.Image(
+                filename=expanduser(
+                    "~/.config/qtile/icons/gnome-dev-memory.svg"),
+                height=14,
+                background=theme_colors[7],
+                padding=4,
+            ),
+            widget.MemoryGraph(
+                **powerline_right,
+                background=theme_colors[7],
+                width=60,
+                margin_x=10,
+            ),
+            # CapsNumWidget(
+            #     background=theme_colors[8],
+            #     margin_x=8,
+            #     **powerline
+            # ),
+            statusnotifier.StatusNotifier(
+                icon_size=18,
+                icon_path=expanduser(
+                    '~/.local/share/icons/McMojave-circle-blue-dark/'),
+                **powerline_right,
+                padding=4,
+                margin_x=8,
+            ),
+            # widget.BrightnessControl(**powerline),
+            widget.UPowerWidget(
+                **powerline_right,
+                background=theme_colors[4],
+            ),
+            widget.Clock(
+                **powerline_right,
+                font="OpenDyslexic Nerd Font Bold",
+                fontsize=18,
+                background=theme_colors[6],
+                format="%I:%M%p",
+                padding=8,
+            ),
+            widget.TextBox(
+                **powerline_right,
+                fontsize=16,
+                font="CaskaydiaCove Nerd Font SemiLight",
+                mouse_callbacks={'Button1': lazy.shutdown()},
+                text="",
+            )],
+            22,
+            background=theme_colors[0],
+        ),
+        bottom=bar.Bar([
+            widget.TextBox(width=5, background=theme_colors[9]),
+            widget.Wallpaper(
+                **powerline_left,
+                background=theme_colors[5],
+                directory=expanduser("~/.config/qtile/wallpaper")
+            ),
+            widget.LaunchBar(
+                **b_powerline_left,
+                # FIXME
+                background=theme_colors[9],
+            ),
+            widget.TaskList(
+                **b_powerline_left,
+                font="Tinos Nerd Font",
+                fontsize=12,
+            ),
+            widget.TextBox(width=1, **powerline_right),
+            widget.Wlan(
+                **b_powerline_right,
+                width=160,
+                format='{essid} {percent:2.0%}',
+                background=theme_colors[3],
+            ),
+            widget.KeyboardLayout(
+                **b_powerline_right,
+                background=theme_colors[4],
+            ),
+            widget.UPowerWidget(
+                **powerline_right,
+                background=theme_colors[8],
+            ),
+            widget.TextBox(width=5, background=theme_colors[8])],
+            25,
             background=theme_colors[0],
         ),
         wallpaper_mode='stretch',
-        wallpaper=expanduser('~/.config/qtile/background.jpg'),
+        wallpaper=expanduser('~/.config/qtile/wallpaper/background.png'),
     ),
 ]
