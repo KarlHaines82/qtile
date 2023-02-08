@@ -1,21 +1,31 @@
-# qtile-dots
-## karl haines' qtile config
-Welcome, and thanks for being interested. After much experimentation and
-many hours of reading documentation and pure hacking as well, this is
-probably the 3rd complete revamp I've done concerning my qtile configuration.
+# linuxkarl qtile-dots
+## qtile config
+A config-junkie's qtile configs. I've spents literally thousands of hours
+babying these files into their teenage years. I listented while they filled
+my logfiles with teenage crap. I RAISED THEM TO PERFECT. ALMOST. BUT NOT REALLY.
+If you like them, you're welcome! And mostly thank you for your interest!
+If you have questions, complaints, or comments and would like to contact me,
+you can find me on Telegram, @linuxkarl, or on IRC in the #qtile chatroom, also
+as linuxkarl.
 
-I'm somewhat of a minimalist, but I do like some transparency and some
-nerd fonts and whatnot, so this is what I've come up with. A very small
-config that suits me perfectly.
+Thanks again.
 
-For visual effects, I'm using mostly qt apps, I am using the dracula theme,
-and I have applied that theme to gtk as well. I'm using the qt config
-tool in combination with kvantummanager and lxappearance to configure
-my theme and it seems to be working pretty well. I'm using xsettingsd
-to make sure that everything gets the same message and have mostly
-been successful.
+### my new neovim setup
+![new-neovim2.png](new-neovim2.png)
 
-I'll add a screenshot or two here shortly.
+### my neovim
+![new-neovim-qtile.png](new-neovim-qtile.png)
 
-## Thanks for visiting!
+### spotify
+![screenshot-music.png](screenshot-music.png)
+
+### screenshot
+![screenshot.png](screenshot.png)
+
+### conky, etc
+![showoff-conky.png](showoff-conky.png)
+
+### Thanks for visiting!
 Feel free to contact me on telegram @linuxkarl615 if you have any questions!
+
+
