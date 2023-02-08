@@ -7,6 +7,10 @@ If you like them, you're welcome! And mostly thank you for your interest!
 If you have questions, complaints, or comments and would like to contact me,
 you can find me on Telegram, @linuxkarl, or on IRC in the #qtile chatroom, also
 as linuxkarl.
+### FIXME
+- FIXME: Bottom bar, launch widget, etc
+- FIXME: implement run_once and run always into new python autostart proc
+- FIXME: Fix not-working window.togroup newclient hook
 
 Thanks again.
 
@@ -24,8 +28,3 @@ Thanks again.
 
 ### conky, etc
 ![showoff-conky.png](showoff-conky.png)
-
-### Thanks for visiting!
-Feel free to contact me on telegram @linuxkarl615 if you have any questions!
-
-
