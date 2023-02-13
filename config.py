@@ -2,12 +2,9 @@ from os import environ
 from os.path import expanduser
 import shlex
 from subprocess import Popen
-# from qtile_extras.widget.decorations import \
-# PowerLineDecoration as powerline_decor
 
 from libqtile.log_utils import logger
 from libqtile import hook
-from libqtile.config import Match
 
 from modules.keys import keys, mod
 from modules.groups import groups
@@ -51,14 +48,14 @@ wmname = "qtile"
 group_app_subscriptions = [
     ['null'],   # 0, any w/o a script                                 #
     ['1 ', 'alacritty', 'kitty', 'konsole'],                    # Group 1
-    ['2 ', 'firefox', 'chromium', 'qutebrowser', '2\uf269 '],  # Group 2
-    ['3 ', 'vim', 'nvim', 'nvim-qt', 'neovide', 'kate', 'xed', '3\ue7c5 '],  # Grup 3
-    ['4 ', 'null', '4\ue235 '],                                             # Group 4
-    ['5 ', 'dolphin', 'pcmanfm-qt', 'thunar', '5\uf115 '],                  # Group 5
-    ['6 ', 'telegram-desktop', 'caprine', 'hexchat', '6\uf232 '],           # Group 6
-    ["7 ", 'spotify', 'cava', 'xmms', '7\uf1bc '],                          # Group 7
-    ["8 ", 'null', '8\uf1d0 '],                                             # Group 8
-    ["9 ", 'null', '9\ue231 '],                                             # Group 9
+    ['2 ', 'firefox', 'chromium', 'qutebrowser'],  # Group 2
+    ['3 ', 'vim', 'nvim', 'nvim-qt', 'neovide', 'kate', 'xed'],  # Grup 3
+    ['4 ', 'null'],                                             # Group 4
+    ['5 ', 'dolphin', 'pcmanfm-qt', 'thunar'],                  # Group 5
+    ['6 ', 'telegram-desktop', 'caprine', 'hexchat'],           # Group 6
+    ['7 ', 'spotify', 'cava', 'xmms'],                          # Group 7
+    ['8 ', 'gnu image manipulation program'],                   # Group 8
+    ['9 ', 'null'],                                             # Group 9
 ]
 
 
@@ -75,8 +72,8 @@ def send_to_proper_workspace(client):
             if client_wm_class in gsub:
                 logger.warn('Match class: %s' % client_wm_class)
                 client.togroup(gsub[0], switch_group=True)
-            else:
-                logger.warn('No match for name: %s ' % client_name)
+            # else:
+            #     logger.warn('No match for name: %s ' % client_name)
 
 
 @hook.subscribe.client_new
