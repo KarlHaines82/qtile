@@ -1,4 +1,4 @@
-from libqtile.config import Group, Key, ScratchPad, DropDown
+from libqtile.config import Group, Key, ScratchPad, DropDown, Match
 from libqtile import hook
 from libqtile.lazy import lazy
 from .keys import keys
@@ -15,7 +15,7 @@ for n in group_names:
     match(name):
         case '1' | '2' | '6':
             groups.append(Group(n, layout='max'))
-        case '4' | '5' | '8':
+        case '8' | '9':
             groups.append(Group(n, layout='floating'))
         case _:
             groups.append(Group(n, layout='max'))
@@ -25,7 +25,7 @@ for n in group_names:
 for g in groups:
     keys.extend([
         Key([mod], g.name[:1], lazy.group[g.name].toscreen(), desc="Switch to group {}".format(g.name)),
-        Key([mod, "shift"], g.name[:1], lazy.window.togroup(g.name,switch_group=True),
+        Key([mod, "shift"], g.name[:1], lazy.window.togroup(g.name, switch_group=True),
             desc="Move current container to group {}".format(g.name)),
     ])
 
@@ -50,20 +50,3 @@ keys.extend([
     Key([], 'F11', lazy.group['scratchpad'].dropdown_toggle('term')),
     Key([mod], 'F11', lazy.group['scratchpad'].dropdown_toggle('qtile-shell')),
 ])
-
-
-@hook.subscribe.client_new
-def send_to_proper_workspace(client):
-    group_app_subscriptions = [
-        ['_'],   # 0, any w/o a script
-        ['alacritty', 'kitty', 'xterm', 'xfce4-terminal', 'konsole'],
-        ['firefox', 'chromium', 'qutebrowser', 'brave', 'konqueror'],
-        ['vim', 'nvim', 'nvim-qt', 'neovide', 'kate', 'xed'],
-        ['null'],
-        ['dolphin', 'pcmanfm-qt', 'thunar'],
-        ['telegram-desktop', 'caprine', 'hexchat'],
-        ['spotify', 'cava', 'xmms']]
-
-    for gsubs in group_app_subscriptions:
-        if client in gsubs:
-            client.togroup(str(gsubs.index), switch_group=True)

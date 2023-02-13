@@ -7,6 +7,7 @@ from subprocess import Popen
 
 from libqtile.log_utils import logger
 from libqtile import hook
+from libqtile.config import Match
 
 from modules.keys import keys, mod
 from modules.groups import groups
@@ -47,6 +48,37 @@ wl_input_rules = None
 wmname = "qtile"
 
 
+group_app_subscriptions = [
+    ['null'],   # 0, any w/o a script                                 #
+    ['1 ', 'alacritty', 'kitty', 'konsole'],                    # Group 1
+    ['2 ', 'firefox', 'chromium', 'qutebrowser', '2\uf269 '],  # Group 2
+    ['3 ', 'vim', 'nvim', 'nvim-qt', 'neovide', 'kate', 'xed', '3\ue7c5 '],  # Grup 3
+    ['4 ', 'null', '4\ue235 '],                                             # Group 4
+    ['5 ', 'dolphin', 'pcmanfm-qt', 'thunar', '5\uf115 '],                  # Group 5
+    ['6 ', 'telegram-desktop', 'caprine', 'hexchat', '6\uf232 '],           # Group 6
+    ["7 ", 'spotify', 'cava', 'xmms', '7\uf1bc '],                          # Group 7
+    ["8 ", 'null', '8\uf1d0 '],                                             # Group 8
+    ["9 ", 'null', '9\ue231 '],                                             # Group 9
+]
+
+
+@hook.subscribe.client_new
+def send_to_proper_workspace(client):
+    for gsub in group_app_subscriptions:
+        client_info = client.info()
+        client_name = client_info['name'].lower()
+        client_wm_class = str(client_info['wm_class'][1]).lower()
+        if client_name in gsub:
+            logger.warn('Match name: %s' % client_name)
+            client.togroup(gsub[0], switch_group=True)
+        else:
+            if client_wm_class in gsub:
+                logger.warn('Match class: %s' % client_wm_class)
+                client.togroup(gsub[0], switch_group=True)
+            else:
+                logger.warn('No match for name: %s ' % client_name)
+
+
 @hook.subscribe.client_new
 def dialogs(window):
     if (window.window.get_wm_type() == 'dialog' or
@@ -56,7 +88,7 @@ def dialogs(window):
 
 @hook.subscribe.startup_complete
 def autostart():
-    logger.info("Beginning autostart() procedure...")
+    logger.warn("Beginning autostart() procedure...")
     autostarts = [
         "dex -ae qtile -s ~/.config/autostart",
         "sh -c ~/.config/conky/startconky.sh",
@@ -64,7 +96,7 @@ def autostart():
         "dunst",
         "blueman-applet",
         "copyq",
-        "nm-tray",
+        "nm-applet --indicator",
     ]
     for p in autostarts:
         ppath = expanduser(p)
@@ -72,4 +104,4 @@ def autostart():
         Popen(proc)
 
 
-logger.debug('Config loaded')
+logger.warn('Config loaded')

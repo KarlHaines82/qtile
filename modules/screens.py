@@ -153,7 +153,6 @@ screens = [
             # widget.BrightnessControl(**powerline),
             widget.UPowerWidget(
                 **powerline_right,
-                background=theme_colors[4],
             ),
             widget.Clock(
                 **powerline_right,
@@ -201,11 +200,11 @@ screens = [
                 **b_powerline_right,
                 background=theme_colors[4],
             ),
-            widget.UPowerWidget(
-                **powerline_right,
-                background=theme_colors[8],
-            ),
-            widget.TextBox(width=5, background=theme_colors[8])],
+            # widget.UPowerWidget(
+            #     **powerline_right,
+            #     background=theme_colors[8],
+            # ),
+            widget.TextBox(width=5, background=theme_colors[4])],
             25,
             background=theme_colors[0],
         ),
