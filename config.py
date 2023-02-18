@@ -1,16 +1,35 @@
+from modules.keys import keys, mod
+from modules.groups import groups
+from modules.layouts import layouts, floating_layout
+from modules.screens import screens
+from modules.mouse import mouse
+
 from os import environ
 from os.path import expanduser
 import shlex
 from subprocess import Popen
 
 from libqtile.log_utils import logger
-from libqtile import hook
+from logging import WARNING
+from libqtile import hook, qtile
+from libqtile.lazy import lazy
 
-from modules.keys import keys, mod
-from modules.groups import groups
-from modules.layouts import layouts, floating_layout
-from modules.screens import screens
-from modules.mouse import mouse
+
+def blab(s):
+    logger.log(msg=s, exc_info=True, level=WARNING)
+
+
+blab('qtile.core.name: %s' % qtile.core.name)
+if qtile.core.name == 'x11':
+    wl_input_rules = None
+    wl_input_rules = dict()
+elif qtile.core.name == 'wayland':
+    from libqtile.backend.wayland.inputs import InputConfig
+    wl_input_rules = {
+        "type:keyboard": InputConfig(kb_layout="us"),
+        "AlpsPS/2 ALPS GlidePoint": InputConfig(scroll_method="two_finger",
+                                                tap=True),
+    }
 
 mod = mod
 keys = keys
@@ -21,7 +40,7 @@ screens = screens
 mouse = mouse
 
 widget_defaults = dict(
-    font="CaskaydiaCove Nerd Font SemiLight",
+    font="InconsolataNGC Nerd Font",
     fontsize=14,
     icon_paths=[
         expanduser("~/.config/qtile/icons"),
@@ -41,21 +60,19 @@ cursor_warp = False
 focus_on_window_activation = "smart"
 follow_mouse_focus = True
 reconfigure_screens = True
-wl_input_rules = None
 wmname = "qtile"
 
-
 group_app_subscriptions = [
-    ['null'],   # 0, any w/o a script                                 #
-    ['1 ', 'alacritty', 'kitty', 'konsole'],                    # Group 1
-    ['2 ', 'firefox', 'chromium', 'qutebrowser'],  # Group 2
-    ['3 ', 'vim', 'nvim', 'nvim-qt', 'neovide', 'kate', 'xed'],  # Grup 3
-    ['4 ', 'null'],                                             # Group 4
-    ['5 ', 'dolphin', 'pcmanfm-qt', 'thunar'],                  # Group 5
-    ['6 ', 'telegram-desktop', 'caprine', 'hexchat'],           # Group 6
-    ['7 ', 'spotify', 'cava', 'xmms'],                          # Group 7
-    ['8 ', 'gnu image manipulation program'],                   # Group 8
-    ['9 ', 'null'],                                             # Group 9
+    ['null'],   # 0, any w/o a script                      #
+    ['1 ', 'alacritty', 'kitty', 'konsole'],              # Group 1
+    ['2 ', 'firefox', 'chromium', 'qutebrowser'],         # Group 2
+    ['3 ', 'vim', 'nvim', 'nvim-qt', 'neovide', 'kate'],  # Group 3
+    ['4 ', 'codium', 'geany', 'kdevelop'],                                       # Group 4
+    ['5 ', 'dolphin', 'pcmanfm-qt', 'thunar'],            # Group 5
+    ['6 ', 'telegram-desktop', 'caprine', 'hexchat'],     # Group 6
+    ['7 ', 'spotify', 'cava', 'xmms'],                    # Group 7
+    ['8 ', 'gnu image manipulation program'],             # Group 8
+    ['9 ', 'null'],                                       # Group 9
 ]
 
 
@@ -66,11 +83,11 @@ def send_to_proper_workspace(client):
         client_name = client_info['name'].lower()
         client_wm_class = str(client_info['wm_class'][1]).lower()
         if client_name in gsub:
-            logger.warn('Match name: %s' % client_name)
+            blab('Match name: %s' % client_name)
             client.togroup(gsub[0], switch_group=True)
         else:
             if client_wm_class in gsub:
-                logger.warn('Match class: %s' % client_wm_class)
+                blab("Match class: %s" % client_wm_class)
                 client.togroup(gsub[0], switch_group=True)
             # else:
             #     logger.warn('No match for name: %s ' % client_name)
@@ -81,24 +98,36 @@ def dialogs(window):
     if (window.window.get_wm_type() == 'dialog' or
        window.window.get_wm_transient_for()):
         window.floating = True
+        lazy.window.center(window)
 
 
 @hook.subscribe.startup_complete
 def autostart():
-    logger.warn("Beginning autostart() procedure...")
+    blab("Beginning autostart() procedure")
     autostarts = [
         "dex -ae qtile -s ~/.config/autostart",
         "sh -c ~/.config/conky/startconky.sh",
         "picom",
         "dunst",
         "blueman-applet",
-        "copyq",
-        "nm-applet --indicator",
+        "xsettingsd",
     ]
+    if qtile.core.name == 'wayland':
+        blab("Starting Xwayland")
+        autostarts.append("Xwayland enable")
+    else:
+        blab("Starting autostarts for core x11!")
+    auto_procs_db = dict()
     for p in autostarts:
         ppath = expanduser(p)
         proc = shlex.split(ppath)
-        Popen(proc)
+        proc = Popen(proc)
+        auto_procs_db["autostart"] = p
+        auto_procs_db["proc"] = proc
+
+    from pprint import pformat
+    autostarts_info = pformat(auto_procs_db)
+    blab("COMPLETED AUTOSTARTS:\n %s" % autostarts_info)
 
 
-logger.warn('Config loaded')
+blab('Config loaded')

@@ -1,16 +1,19 @@
-# from json import decoder
+from .theme import palette as theme_colors
+from .mywidgets import CapsNumWidget
+
+from json import decoder
+from os.path import expanduser
+
 from libqtile.config import Screen
-from libqtile import bar
+from libqtile import bar, qtile
 from libqtile.lazy import lazy
 from qtile_extras import widget
 from qtile_extras.widget import statusnotifier
 from qtile_extras.widget.decorations import \
         PowerLineDecoration as powerline_decor
-from os.path import expanduser
-from .theme import palette as theme_colors
+
 # from powerline.bindings.qtile import widget as qtile_widget
 # from powerline.bindings.qtile.widget import QTilePowerline
-# from .mywidgets import CapsNumWidget
 # from powerline import Powerline
 
 
@@ -25,18 +28,6 @@ powerline_right = {
     ]
 }
 powerline_left = {
-    "decorations": [
-        powerline_decor(),
-        powerline_decor(path="arrow_left")
-    ]
-}
-b_powerline_right = {
-    "decorations": [
-        powerline_decor(),
-        powerline_decor(path="arrow_right")
-    ]
-}
-b_powerline_left = {
     "decorations": [
         powerline_decor(),
         powerline_decor(path="arrow_left")
@@ -64,6 +55,7 @@ screens = [
                 **powerline_left,
                 name="GroupBoxTop",
                 font="CaskaydiaCove Nerd Font SemiLight",
+                fontshadow="#23283b",
                 fontsize=14,
                 background=theme_colors[8],
                 active=theme_colors[20],
@@ -91,8 +83,8 @@ screens = [
                 scale=0.7,
                 **powerline_left,
             ),
+            widget.Prompt(**powerline_left),
             widget.Spacer(width=bar.STRETCH, **powerline_right),
-            widget.Prompt(),
             widget.Chord(
                 chords_colors={
                     "launch": ("#ff0000", "#ffffff"),
@@ -138,11 +130,10 @@ screens = [
                 margin_x=10,
             ),
             # CapsNumWidget(
-            #     background=theme_colors[8],
+            #     **powerline_right,
             #     margin_x=8,
-            #     **powerline
             # ),
-            statusnotifier.StatusNotifier(
+            widget.Systray(
                 icon_size=18,
                 icon_path=expanduser(
                     '~/.local/share/icons/McMojave-circle-blue-dark/'),
@@ -150,10 +141,8 @@ screens = [
                 padding=4,
                 margin_x=8,
             ),
-            # widget.BrightnessControl(**powerline),
-            widget.UPowerWidget(
-                **powerline_right,
-            ),
+            widget.BrightnessControl(**powerline_right),
+            widget.UPowerWidget(**powerline_right),
             widget.Clock(
                 **powerline_right,
                 font="OpenDyslexic Nerd Font Bold",
@@ -173,42 +162,33 @@ screens = [
             background=theme_colors[0],
         ),
         bottom=bar.Bar([
-            widget.TextBox(width=5, background=theme_colors[9]),
-            widget.Wallpaper(
+            widget.TextBox(
                 **powerline_left,
-                background=theme_colors[5],
-                directory=expanduser("~/.config/qtile/wallpaper")
+                background=theme_colors[9],
+                text="qtile.core: %s" % qtile.core.name,
             ),
             widget.LaunchBar(
-                **b_powerline_left,
+                **powerline_left,
                 # FIXME
                 background=theme_colors[9],
             ),
             widget.TaskList(
-                **b_powerline_left,
-                font="Tinos Nerd Font",
-                fontsize=12,
+                **powerline_left,
             ),
             widget.TextBox(width=1, **powerline_right),
             widget.Wlan(
-                **b_powerline_right,
-                width=160,
-                format='{essid} {percent:2.0%}',
+                **powerline_right,
+                format='{essid} {percent:2.02%}',
                 background=theme_colors[3],
             ),
             widget.KeyboardLayout(
-                **b_powerline_right,
+                **powerline_right,
                 background=theme_colors[4],
             ),
-            # widget.UPowerWidget(
-            #     **powerline_right,
-            #     background=theme_colors[8],
-            # ),
-            widget.TextBox(width=5, background=theme_colors[4])],
-            25,
-            background=theme_colors[0],
+            widget.TextBox(width=5, background=theme_colors[4]),
+            ], 25, background=theme_colors[0]
         ),
         wallpaper_mode='stretch',
         wallpaper=expanduser('~/.config/qtile/wallpaper/background.png'),
-    ),
+    )
 ]

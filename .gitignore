@@ -1,5 +1,7 @@
 # cheetsheets
 mod4-*.png
+*.geany
+launch.json
 
 # Byte-compiled / optimized / DLL files
 **__pycache__/**
