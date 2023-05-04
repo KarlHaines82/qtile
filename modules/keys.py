@@ -3,12 +3,12 @@ from libqtile.lazy import lazy
 
 mod = "mod4"
 editor = "neovide"
-terminal = "alacritty"
-aterminal = "kitty"
+aterminal = "wezterm"
+terminal = "kitty"
 dmenu = "rofi -modi run,window,combi -combi run,window -show combi"
 browser = "chromium"
 firefox = "firefox"
-afileman = "pcmanfm-qt"
+afileman = "thunar"
 fileman = "dolphin"
 telegram = "telegram-desktop"
 

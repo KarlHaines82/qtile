@@ -5,7 +5,7 @@ from json import decoder
 from os.path import expanduser
 
 from libqtile.config import Screen
-from libqtile import bar, qtile
+from libqtile import bar
 from libqtile.lazy import lazy
 from qtile_extras import widget
 from qtile_extras.widget import statusnotifier
@@ -133,16 +133,19 @@ screens = [
             #     **powerline_right,
             #     margin_x=8,
             # ),
-            widget.Systray(
+            statusnotifier.QtileStatusNotifier(
                 icon_size=18,
-                icon_path=expanduser(
-                    '~/.local/share/icons/McMojave-circle-blue-dark/'),
                 **powerline_right,
+                background=theme_colors[16],
                 padding=4,
                 margin_x=8,
             ),
             widget.BrightnessControl(**powerline_right),
-            widget.UPowerWidget(**powerline_right),
+            widget.TextBox(
+                **powerline_right,
+                background=theme_colors[16],
+                width=1,
+            ),
             widget.Clock(
                 **powerline_right,
                 font="OpenDyslexic Nerd Font Bold",
@@ -165,7 +168,7 @@ screens = [
             widget.TextBox(
                 **powerline_left,
                 background=theme_colors[9],
-                text="qtile.core: %s" % qtile.core.name,
+                text="qtile.core:"
             ),
             widget.LaunchBar(
                 **powerline_left,

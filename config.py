@@ -11,25 +11,13 @@ from subprocess import Popen
 
 from libqtile.log_utils import logger
 from logging import WARNING
-from libqtile import hook, qtile
+from libqtile import hook
 from libqtile.lazy import lazy
 
 
 def blab(s):
     logger.log(msg=s, exc_info=True, level=WARNING)
 
-
-blab('qtile.core.name: %s' % qtile.core.name)
-if qtile.core.name == 'x11':
-    wl_input_rules = None
-    wl_input_rules = dict()
-elif qtile.core.name == 'wayland':
-    from libqtile.backend.wayland.inputs import InputConfig
-    wl_input_rules = {
-        "type:keyboard": InputConfig(kb_layout="us"),
-        "AlpsPS/2 ALPS GlidePoint": InputConfig(scroll_method="two_finger",
-                                                tap=True),
-    }
 
 mod = mod
 keys = keys
@@ -40,7 +28,7 @@ screens = screens
 mouse = mouse
 
 widget_defaults = dict(
-    font="InconsolataNGC Nerd Font",
+    font="CaskaydiaCove Nerd Font",
     fontsize=14,
     icon_paths=[
         expanduser("~/.config/qtile/icons"),
@@ -67,7 +55,7 @@ group_app_subscriptions = [
     ['1 ', 'alacritty', 'kitty', 'konsole'],              # Group 1
     ['2 ', 'firefox', 'chromium', 'qutebrowser'],         # Group 2
     ['3 ', 'vim', 'nvim', 'nvim-qt', 'neovide', 'kate'],  # Group 3
-    ['4 ', 'codium', 'geany', 'kdevelop'],                                       # Group 4
+    ['4 ', 'codium', 'geany', 'kdevelop'],               # Group 4
     ['5 ', 'dolphin', 'pcmanfm-qt', 'thunar'],            # Group 5
     ['6 ', 'telegram-desktop', 'caprine', 'hexchat'],     # Group 6
     ['7 ', 'spotify', 'cava', 'xmms'],                    # Group 7
@@ -95,8 +83,7 @@ def send_to_proper_workspace(client):
 
 @hook.subscribe.client_new
 def dialogs(window):
-    if (window.window.get_wm_type() == 'dialog' or
-       window.window.get_wm_transient_for()):
+    if (window.window.get_wm_type() == 'dialog' or window.window.get_wm_transient_for()):
         window.floating = True
         lazy.window.center(window)
 
@@ -106,28 +93,13 @@ def autostart():
     blab("Beginning autostart() procedure")
     autostarts = [
         "dex -ae qtile -s ~/.config/autostart",
-        "sh -c ~/.config/conky/startconky.sh",
         "picom",
         "dunst",
-        "blueman-applet",
-        "xsettingsd",
     ]
-    if qtile.core.name == 'wayland':
-        blab("Starting Xwayland")
-        autostarts.append("Xwayland enable")
-    else:
-        blab("Starting autostarts for core x11!")
-    auto_procs_db = dict()
     for p in autostarts:
         ppath = expanduser(p)
         proc = shlex.split(ppath)
         proc = Popen(proc)
-        auto_procs_db["autostart"] = p
-        auto_procs_db["proc"] = proc
-
-    from pprint import pformat
-    autostarts_info = pformat(auto_procs_db)
-    blab("COMPLETED AUTOSTARTS:\n %s" % autostarts_info)
 
 
 blab('Config loaded')
