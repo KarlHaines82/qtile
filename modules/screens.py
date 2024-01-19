@@ -1,25 +1,22 @@
 from .theme import palette as theme_colors
-from .mywidgets import CapsNumWidget
 
-from json import decoder
+# from json import decoder
 from os.path import expanduser
 
 from libqtile.config import Screen
-from libqtile import bar
+from libqtile import bar, qtile
 from libqtile.lazy import lazy
 from qtile_extras import widget
 from qtile_extras.widget import statusnotifier
 from qtile_extras.widget.decorations import \
         PowerLineDecoration as powerline_decor
 
-# from powerline.bindings.qtile import widget as qtile_widget
-# from powerline.bindings.qtile.widget import QTilePowerline
-# from powerline import Powerline
 
-
+qtile_core = str(qtile.core.name)
 ssep = {
-    'padding': 8,
+    'padding': 4,
 }
+
 
 powerline_right = {
     "decorations": [
@@ -35,62 +32,120 @@ powerline_left = {
 }
 
 
+top_widgets = [
+    widget.Image(
+        **powerline_left,
+        filename=expanduser("~/.config/qtile/icons/arch01.png"),
+        mouse_callbacks={
+            'Button1': lazy.spawn("rofi -modi combi,window,drun \
+                -combi window,drun -show drun")
+        },
+        height=18,
+        padding=5,
+        margin=2,
+        scale=0.7,
+        background=theme_colors[16],
+    ),
+    widget.GroupBox(
+        **powerline_left,
+        name="GroupBoxTop",
+        fontshadow="#23283b",
+        fontsize=14,
+        background=theme_colors[8],
+        active=theme_colors[20],
+        inactive=theme_colors[18],
+        rounded=True,
+        highlight_method='block',
+        urgent_alert_method='line',
+        urgent_border="#0a0",
+        this_current_screen_border=theme_colors[17],
+        this_screen_border=theme_colors[17],
+        other_current_screen_border=theme_colors[20],
+        other_screen_border=theme_colors[3],
+        disable_drag=True,
+        markup=True,
+        padding=2,
+        margin=3
+
+    ),
+    widget.TextBox(width=1, background=theme_colors[3]),
+    widget.CurrentLayoutIcon(
+        **powerline_left,
+        custom_icon_paths=[expanduser("~/.config/qtile/icons")],
+        background=theme_colors[3],
+        padding=5,
+        scale=0.8,
+    ),
+    widget.Prompt(**powerline_left),
+    widget.Spacer(width=bar.STRETCH, **powerline_right),
+    widget.Chord(
+        chords_colors={
+            "launch": ("#ff0000", "#ffffff"),
+        },
+        name_transform=lambda name: name.upper(),
+        **powerline_right,
+    ),
+]
+
+
+# Add Systray widget for x11 or StatusNotifier for wayland
+if qtile_core == 'wayland':
+    top_widgets.append(statusnotifier.StatusNotifier(
+        icon_size=22,
+        icon_path="/usr/share/icons/breeze-dark",
+        margin_x=6,
+    ))
+elif qtile_core == 'x11':
+    top_widgets.append(widget.Systray(
+        icon_size=22,
+        icon_path="/usr/share/icons/breeze-dark",
+        margin_x=6,
+    ))
+
+
+top_widgets.extend([
+    widget.UPowerWidget(
+        margin_y=5,
+    ),
+    widget.TextBox(
+        fontsize=16,
+        margin_y=4,
+        mouse_callbacks={'Button1': lazy.shutdown()},
+        text="",
+    ),
+    widget.Clock(
+        format="%I:%M%p",
+        fontsize=18,
+        font="EnvyCoder Nerd Font Bold",
+        align="center",
+    ),
+])
+
+
 screens = [
     Screen(
-        top=bar.Bar([
-            widget.Image(
+        top=bar.Bar(
+            top_widgets,
+            24,
+            background=theme_colors[0],
+        ),
+        bottom=bar.Bar([
+            widget.TextBox(
                 **powerline_left,
-                filename=expanduser("~/.config/qtile/icons/arch01.png"),
-                mouse_callbacks={
-                    'Button1': lazy.spawn("rofi -modi combi,window,drun \
-                        -combi window,drun -show drun")
-                },
-                height=18,
-                padding=5,
-                margin=2,
-                scale=0.7,
-                background=theme_colors[16],
+                background=theme_colors[9],
+                text="qtile.core: "+qtile_core,
             ),
-            widget.GroupBox(
-                **powerline_left,
-                name="GroupBoxTop",
-                font="CaskaydiaCove Nerd Font SemiLight",
-                fontshadow="#23283b",
-                fontsize=14,
-                background=theme_colors[8],
-                active=theme_colors[20],
-                inactive=theme_colors[18],
-                rounded=True,
-                highlight_method='block',
-                urgent_alert_method='line',
-                urgent_border="#0a0",
-                this_current_screen_border=theme_colors[17],
-                this_screen_border=theme_colors[17],
-                other_current_screen_border=theme_colors[20],
-                other_screen_border=theme_colors[3],
-                disable_drag=True,
-                markup=True,
-                padding=2,
-                margin=3
-
-            ),
-            widget.CurrentLayoutIcon(
-                custom_icon_paths=[expanduser("~/.config/qtile/icons")],
-                background=theme_colors[3],
-                padding=5,
-                margin_x=4,
-                margin_y=4,
-                scale=0.7,
-                **powerline_left,
-            ),
-            widget.Prompt(**powerline_left),
-            widget.Spacer(width=bar.STRETCH, **powerline_right),
-            widget.Chord(
-                chords_colors={
-                    "launch": ("#ff0000", "#ffffff"),
-                },
-                name_transform=lambda name: name.upper(),
+            # widget.LaunchBar(
+            #     **powerline_left,
+            #     # FIXME
+            #     background=theme_colors[9],
+            # ),
+            widget.TaskList(**powerline_left),
+            widget.TextBox(width=1, **powerline_right),
+            widget.Wlan(
                 **powerline_right,
+                format='{essid} {percent:2.02%}',
+                background=theme_colors[3],
             ),
             widget.Image(
                 filename=expanduser(
@@ -101,10 +156,10 @@ screens = [
             ),
             widget.CPU(
                 background=theme_colors[5],
+                fontsize=16,
+                font="Agave Nerd Font Bold",
                 format="{load_percent}%",
-                font="Tinos Nerd Font Bold",
-                fontsize=12,
-                width=46,
+                width=54,
                 align="right",
             ),
             widget.CPUGraph(
@@ -129,67 +184,11 @@ screens = [
                 width=60,
                 margin_x=10,
             ),
-            # CapsNumWidget(
-            #     **powerline_right,
-            #     margin_x=8,
-            # ),
-            statusnotifier.QtileStatusNotifier(
-                icon_size=18,
-                **powerline_right,
-                background=theme_colors[16],
-                padding=4,
-                margin_x=8,
-            ),
-            widget.BrightnessControl(**powerline_right),
-            widget.TextBox(
-                **powerline_right,
-                background=theme_colors[16],
-                width=1,
-            ),
-            widget.Clock(
-                **powerline_right,
-                font="OpenDyslexic Nerd Font Bold",
-                fontsize=18,
-                background=theme_colors[6],
-                format="%I:%M%p",
-                padding=8,
-            ),
-            widget.TextBox(
-                **powerline_right,
-                fontsize=16,
-                font="CaskaydiaCove Nerd Font SemiLight",
-                mouse_callbacks={'Button1': lazy.shutdown()},
-                text="",
-            )],
-            22,
-            background=theme_colors[0],
-        ),
-        bottom=bar.Bar([
-            widget.TextBox(
-                **powerline_left,
-                background=theme_colors[9],
-                text="qtile.core:"
-            ),
-            widget.LaunchBar(
-                **powerline_left,
-                # FIXME
-                background=theme_colors[9],
-            ),
-            widget.TaskList(
-                **powerline_left,
-            ),
-            widget.TextBox(width=1, **powerline_right),
-            widget.Wlan(
-                **powerline_right,
-                format='{essid} {percent:2.02%}',
-                background=theme_colors[3],
-            ),
             widget.KeyboardLayout(
-                **powerline_right,
                 background=theme_colors[4],
-            ),
-            widget.TextBox(width=5, background=theme_colors[4]),
-            ], 25, background=theme_colors[0]
+            )],
+            25,
+            background=theme_colors[0]
         ),
         wallpaper_mode='stretch',
         wallpaper=expanduser('~/.config/qtile/wallpaper/background.png'),

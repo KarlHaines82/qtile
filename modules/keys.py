@@ -2,9 +2,9 @@ from libqtile.config import Key
 from libqtile.lazy import lazy
 
 mod = "mod4"
-editor = "neovide"
-aterminal = "wezterm"
-terminal = "kitty"
+editor = "lvim-qt"
+terminal = "alacritty"
+aterminal = "kitty"
 dmenu = "rofi -modi run,window,combi -combi run,window -show combi"
 browser = "chromium"
 firefox = "firefox"

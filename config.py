@@ -11,10 +11,11 @@ from subprocess import Popen
 
 from libqtile.log_utils import logger
 from logging import WARNING
-from libqtile import hook
+from libqtile import hook, qtile
 from libqtile.lazy import lazy
 
 
+qtile_core = str(qtile.core.name)
 def blab(s):
     logger.log(msg=s, exc_info=True, level=WARNING)
 
@@ -28,15 +29,15 @@ screens = screens
 mouse = mouse
 
 widget_defaults = dict(
-    font="CaskaydiaCove Nerd Font",
+    font="Noto Serif",
     fontsize=14,
-    icon_paths=[
+    custom_icon_paths=[
         expanduser("~/.config/qtile/icons"),
         expanduser("~/.local/share/icons"),
     ],
 )
-
 extension_defaults = widget_defaults.copy()
+
 # environment variables
 environ['QT_QPA_PLATFORMTHEME'] = 'qt5ct'
 environ['NEOVIDE_MULTIGRID'] = 'true'
@@ -48,11 +49,11 @@ cursor_warp = False
 focus_on_window_activation = "smart"
 follow_mouse_focus = True
 reconfigure_screens = True
-wmname = "qtile"
+wmname = "Qtile"
 
 group_app_subscriptions = [
     ['null'],   # 0, any w/o a script                      #
-    ['1 ', 'alacritty', 'kitty', 'konsole'],              # Group 1
+    ['1 ', 'alacritty', 'kitty', 'wezterm', 'konsole'],              # Group 1
     ['2 ', 'firefox', 'chromium', 'qutebrowser'],         # Group 2
     ['3 ', 'vim', 'nvim', 'nvim-qt', 'neovide', 'kate'],  # Group 3
     ['4 ', 'codium', 'geany', 'kdevelop'],               # Group 4
@@ -62,6 +63,21 @@ group_app_subscriptions = [
     ['8 ', 'gnu image manipulation program'],             # Group 8
     ['9 ', 'null'],                                       # Group 9
 ]
+
+autostarts = [
+    "dex -as ~/.config/autostart",
+]
+if qtile_core == 'x11':
+    autostarts.extend([
+        "picom",
+        "dunst"
+    ])
+elif qtile_core == 'wayland':
+    autostarts.extend([
+        "mako"
+    ])
+
+autostarts_running = []
 
 
 @hook.subscribe.client_new
@@ -73,12 +89,11 @@ def send_to_proper_workspace(client):
         if client_name in gsub:
             blab('Match name: %s' % client_name)
             client.togroup(gsub[0], switch_group=True)
-        else:
-            if client_wm_class in gsub:
+        elif client_wm_class in gsub:
                 blab("Match class: %s" % client_wm_class)
                 client.togroup(gsub[0], switch_group=True)
-            # else:
-            #     logger.warn('No match for name: %s ' % client_name)
+        else:
+            blab('No match for name: %s ' % client_name)
 
 
 @hook.subscribe.client_new
@@ -91,15 +106,16 @@ def dialogs(window):
 @hook.subscribe.startup_complete
 def autostart():
     blab("Beginning autostart() procedure")
-    autostarts = [
-        "dex -ae qtile -s ~/.config/autostart",
-        "picom",
-        "dunst",
-    ]
     for p in autostarts:
         ppath = expanduser(p)
         proc = shlex.split(ppath)
-        proc = Popen(proc)
+        subproc = Popen(proc)
+        autostarts_running.append(subproc)
 
 
-blab('Config loaded')
+@hook.subscribe.shutdown
+def cleanup():
+    for p in autostarts_running:
+        blab('Killing process: '+str(p.args)+' (pid '+str(p.pid)+') ...')
+        p.kill()
+
