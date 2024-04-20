@@ -7,10 +7,10 @@ from libqtile.config import Screen
 from libqtile import bar, qtile
 from libqtile.lazy import lazy
 from qtile_extras import widget
-from qtile_extras.widget import statusnotifier
+from qtile_extras.widget import lazify_imports, statusnotifier
 from qtile_extras.widget.decorations import \
         PowerLineDecoration as powerline_decor
-
+from modules.mywidgets import CapsNumWidget
 
 qtile_core = str(qtile.core.name)
 ssep = {
@@ -65,8 +65,7 @@ top_widgets = [
         disable_drag=True,
         markup=True,
         padding=2,
-        margin=3
-
+        margin=3,
     ),
     widget.TextBox(width=1, background=theme_colors[3]),
     widget.CurrentLayoutIcon(
@@ -85,6 +84,7 @@ top_widgets = [
         name_transform=lambda name: name.upper(),
         **powerline_right,
     ),
+    widget.Visualizer(),
 ]
 
 
@@ -104,20 +104,19 @@ elif qtile_core == 'x11':
 
 
 top_widgets.extend([
-    widget.UPowerWidget(
-        margin_y=5,
+    widget.Visualizer(),
+    widget.UPowerWidget(),
+    CapsNumWidget(),
+    widget.Clock(
+        format="%I:%M%p",
+        fontsize=18,
+        align="center",
     ),
     widget.TextBox(
         fontsize=16,
         margin_y=4,
         mouse_callbacks={'Button1': lazy.shutdown()},
         text="",
-    ),
-    widget.Clock(
-        format="%I:%M%p",
-        fontsize=18,
-        font="EnvyCoder Nerd Font Bold",
-        align="center",
     ),
 ])
 
@@ -126,7 +125,7 @@ screens = [
     Screen(
         top=bar.Bar(
             top_widgets,
-            24,
+            26,
             background=theme_colors[0],
         ),
         bottom=bar.Bar([
@@ -187,10 +186,8 @@ screens = [
             widget.KeyboardLayout(
                 background=theme_colors[4],
             )],
-            25,
-            background=theme_colors[0]
-        ),
+        26, background=theme_colors[0]),
         wallpaper_mode='stretch',
-        wallpaper=expanduser('~/.config/qtile/wallpaper/background.png'),
+        wallpaper=expanduser('~/.config/qtile/wallpaper/vaderwallpaper.jpg'),
     )
 ]

@@ -28,9 +28,10 @@ floating_layout = floating_layout
 screens = screens
 mouse = mouse
 
+
 widget_defaults = dict(
-    font="Noto Serif",
-    fontsize=14,
+    font="Ubuntu Nerd Font",
+    fontsize=16,
     custom_icon_paths=[
         expanduser("~/.config/qtile/icons"),
         expanduser("~/.local/share/icons"),
@@ -39,7 +40,7 @@ widget_defaults = dict(
 extension_defaults = widget_defaults.copy()
 
 # environment variables
-environ['QT_QPA_PLATFORMTHEME'] = 'qt5ct'
+environ['QT_QPA_PLATFORMTHEME'] = 'qt6ct'
 environ['NEOVIDE_MULTIGRID'] = 'true'
 
 auto_fullscreen = True
@@ -49,33 +50,34 @@ cursor_warp = False
 focus_on_window_activation = "smart"
 follow_mouse_focus = True
 reconfigure_screens = True
-wmname = "Qtile"
+wmname = "qtile"
 
 group_app_subscriptions = [
-    ['null'],   # 0, any w/o a script                      #
-    ['1 ', 'alacritty', 'kitty', 'wezterm', 'konsole'],              # Group 1
-    ['2 ', 'firefox', 'chromium', 'qutebrowser'],         # Group 2
-    ['3 ', 'vim', 'nvim', 'nvim-qt', 'neovide', 'kate'],  # Group 3
-    ['4 ', 'codium', 'geany', 'kdevelop'],               # Group 4
-    ['5 ', 'dolphin', 'pcmanfm-qt', 'thunar'],            # Group 5
-    ['6 ', 'telegram-desktop', 'caprine', 'hexchat'],     # Group 6
-    ['7 ', 'spotify', 'cava', 'xmms'],                    # Group 7
-    ['8 ', 'gnu image manipulation program'],             # Group 8
-    ['9 ', 'null'],                                       # Group 9
+    ['null'],                                                                          # 0, any w/o a script
+    ['1 ', 'alacritty', 'kitty', 'wezterm', 'konsole'],           # Group 1
+    ['2 ', 'firefox', 'chromium', 'qutebrowser', 'librewolf',\
+            'vivaldi', 'angelfish', 'midori' ],                           # Group 2
+    ['3 ', 'vim', 'nvim', 'nvim-qt', 'neovide', 'kate'],        # Group 3
+    ['4 ', 'codium', 'geany', 'kdevelop'],                         # Group 4
+    ['5 ', 'dolphin', 'pcmanfm-qt', 'thunar'],                    # Group 5
+    ['6 ', 'telegram-desktop', 'caprine', 'hexchat'],          # Group 6
+    ['7 ', 'spotify', 'xmms'],                                  # Group 7
+    ['8 ', 'gnu image manipulation program'],               # Group 8
+    ['9 ', 'null'],                                                                # Group 9
 ]
 
 autostarts = [
-    "dex -as ~/.config/autostart",
+    "dex -ae qtile",
+    "dunst",
+    "xsettingsd",
 ]
+
 if qtile_core == 'x11':
-    autostarts.extend([
-        "picom",
-        "dunst"
-    ])
+    autostarts.extend(["picom", "nitrogen --restore"])
 elif qtile_core == 'wayland':
-    autostarts.extend([
-        "mako"
-    ])
+    # autostarts.extend()
+    blab("Do nothing.")
+
 
 autostarts_running = []
 
@@ -90,15 +92,15 @@ def send_to_proper_workspace(client):
             blab('Match name: %s' % client_name)
             client.togroup(gsub[0], switch_group=True)
         elif client_wm_class in gsub:
-                blab("Match class: %s" % client_wm_class)
-                client.togroup(gsub[0], switch_group=True)
+            blab("Match class: %s" % client_wm_class)
+            client.togroup(gsub[0], switch_group=True)
         else:
             blab('No match for name: %s ' % client_name)
 
 
 @hook.subscribe.client_new
 def dialogs(window):
-    if (window.window.get_wm_type() == 'dialog' or window.window.get_wm_transient_for()):
+    if (window.window.get_wm_type == 'dialog'): 
         window.floating = True
         lazy.window.center(window)
 

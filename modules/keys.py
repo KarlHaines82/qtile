@@ -2,12 +2,12 @@ from libqtile.config import Key
 from libqtile.lazy import lazy
 
 mod = "mod4"
-editor = "lvim-qt"
-terminal = "alacritty"
-aterminal = "kitty"
+editor = "neovide-lunarvim"
+aterminal = "alacritty"
+terminal = "kitty"
 dmenu = "rofi -modi run,window,combi -combi run,window -show combi"
-browser = "chromium"
-firefox = "firefox"
+browser = "vivaldi"
+firefox = "librewolf"
 afileman = "thunar"
 fileman = "dolphin"
 telegram = "telegram-desktop"
