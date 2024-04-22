@@ -10,7 +10,7 @@ from qtile_extras import widget
 from qtile_extras.widget import lazify_imports, statusnotifier
 from qtile_extras.widget.decorations import \
         PowerLineDecoration as powerline_decor
-from modules.mywidgets import CapsNumWidget
+# from modules.mywidgets import CapsNumWidget
 
 qtile_core = str(qtile.core.name)
 ssep = {
@@ -104,9 +104,8 @@ elif qtile_core == 'x11':
 
 
 top_widgets.extend([
-    widget.Visualizer(),
     widget.UPowerWidget(),
-    CapsNumWidget(),
+    # CapsNumWidget(),
     widget.Clock(
         format="%I:%M%p",
         fontsize=18,
@@ -156,10 +155,8 @@ screens = [
             widget.CPU(
                 background=theme_colors[5],
                 fontsize=16,
-                font="Agave Nerd Font Bold",
                 format="{load_percent}%",
-                width=54,
-                align="right",
+                width=60,
             ),
             widget.CPUGraph(
                 **powerline_right,
@@ -174,18 +171,15 @@ screens = [
                 filename=expanduser(
                     "~/.config/qtile/icons/gnome-dev-memory.svg"),
                 height=14,
-                background=theme_colors[7],
                 padding=4,
             ),
+            widget.Memory(measure_mem="G", fontsize=16),
             widget.MemoryGraph(
                 **powerline_right,
-                background=theme_colors[7],
                 width=60,
                 margin_x=10,
             ),
-            widget.KeyboardLayout(
-                background=theme_colors[4],
-            )],
+            widget.TextBox(**ssep, **powerline_right)],
         26, background=theme_colors[0]),
         wallpaper_mode='stretch',
         wallpaper=expanduser('~/.config/qtile/wallpaper/vaderwallpaper.jpg'),

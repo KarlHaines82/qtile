@@ -30,7 +30,7 @@ mouse = mouse
 
 
 widget_defaults = dict(
-    font="Ubuntu Nerd Font",
+    font="DroidSans Nerd Font",
     fontsize=16,
     custom_icon_paths=[
         expanduser("~/.config/qtile/icons"),
@@ -67,16 +67,16 @@ group_app_subscriptions = [
 ]
 
 autostarts = [
+    "dbus-update-activation-environment --systemd --all",
     "dex -ae qtile",
     "dunst",
     "xsettingsd",
 ]
 
 if qtile_core == 'x11':
-    autostarts.extend(["picom", "nitrogen --restore"])
+    autostarts.extend(["picom"])
 elif qtile_core == 'wayland':
-    # autostarts.extend()
-    blab("Do nothing.")
+    autostarts.extend([""])
 
 
 autostarts_running = []

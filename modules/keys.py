@@ -3,10 +3,10 @@ from libqtile.lazy import lazy
 
 mod = "mod4"
 editor = "neovide-lunarvim"
-aterminal = "alacritty"
-terminal = "kitty"
+terminal = "alacritty"
+aterminal = "kitty"
 dmenu = "rofi -modi run,window,combi -combi run,window -show combi"
-browser = "vivaldi"
+browser = "chromium"
 firefox = "librewolf"
 afileman = "thunar"
 fileman = "dolphin"
@@ -73,12 +73,12 @@ keys = [
     Key([mod, "control"], "k", lazy.layout.grow_up(),
         desc="Grow window up"),
     # Ratio grow and shink for use with monad-type layouts
-    Key([mod], "i", lazy.layout.grow(),
+    Key([mod, "control"], "i", lazy.layout.grow(),
         desc="Expand window size ratio by .05"),
-    Key([mod], "m", lazy.layout.shrink(),
+    Key([mod, "control"], "m", lazy.layout.shrink(),
         desc="Shrink window size ratio by .05"),
-    Key([mod], "o", lazy.layout.maximize()),
-    Key([mod, "shift"], "n", lazy.layout.normalize(),
+    Key([mod, "control"], "o", lazy.layout.maximize()),
+    Key([mod, "control"], "n", lazy.layout.normalize(),
         desc="Reset all window sizes"),
     # Toggle between split and unsplit sides of stack.
     # Split = all windows displayed
@@ -91,9 +91,9 @@ keys = [
         desc="Toggle between layouts"),
     Key([mod], "w", lazy.window.kill(),
         desc="Kill focused window"),
-    Key([mod, "control"], "r", lazy.reload_config(),
+    Key([mod, "mod1"], "r", lazy.reload_config(),
         desc="Reload the config"),
-    Key([mod, "control"], "q", lazy.shutdown(),
+    Key([mod, "mod1"], "q", lazy.shutdown(),
         desc="Shutdown Qtile"),
     Key([mod], "r", lazy.spawncmd(),
         desc="Spawn a command using a prompt widget"),
