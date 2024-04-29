@@ -16,6 +16,8 @@ from libqtile.lazy import lazy
 
 
 qtile_core = str(qtile.core.name)
+
+
 def blab(s):
     logger.log(msg=s, exc_info=True, level=WARNING)
 
@@ -40,8 +42,8 @@ widget_defaults = dict(
 extension_defaults = widget_defaults.copy()
 
 # environment variables
-environ['QT_QPA_PLATFORMTHEME'] = 'qt6ct'
-environ['NEOVIDE_MULTIGRID'] = 'true'
+environ["QT_QPA_PLATFORMTHEME"] = "qt6ct"
+environ["NEOVIDE_MULTIGRID"] = "true"
 
 auto_fullscreen = True
 auto_minimize = False
@@ -53,17 +55,26 @@ reconfigure_screens = True
 wmname = "qtile"
 
 group_app_subscriptions = [
-    ['null'],                                                                          # 0, any w/o a script
-    ['1 ', 'alacritty', 'kitty', 'wezterm', 'konsole'],           # Group 1
-    ['2 ', 'firefox', 'chromium', 'qutebrowser', 'librewolf',\
-            'vivaldi', 'angelfish', 'midori' ],                           # Group 2
-    ['3 ', 'vim', 'nvim', 'nvim-qt', 'neovide', 'kate'],        # Group 3
-    ['4 ', 'codium', 'geany', 'kdevelop'],                         # Group 4
-    ['5 ', 'dolphin', 'pcmanfm-qt', 'thunar'],                    # Group 5
-    ['6 ', 'telegram-desktop', 'caprine', 'hexchat'],          # Group 6
-    ['7 ', 'spotify', 'xmms'],                                  # Group 7
-    ['8 ', 'gnu image manipulation program'],               # Group 8
-    ['9 ', 'null'],                                                                # Group 9
+    ["null"],  # 0, any w/o a script
+    ["1 ", "alacritty", "kitty", "wezterm", "konsole"],  # Group 1
+    [
+        "2 ",
+        "firefox",
+        "chromium",
+        "qutebrowser",
+        "librewolf",
+        "vivaldi",
+        "angelfish",
+        "midori",
+        "firedragon",
+    ],  # Group 2
+    ["3 ", "vim", "nvim", "nvim-qt", "neovide", "kate"],  # Group 3
+    ["4 ", "codium", "geany", "kdevelop"],  # Group 4
+    ["5 ", "dolphin", "pcmanfm-qt", "thunar"],  # Group 5
+    ["6 ", "telegram-desktop", "caprine", "hexchat"],  # Group 6
+    ["7 ", "spotify", "xmms"],  # Group 7
+    ["8 ", "gnu image manipulation program"],  # Group 8
+    ["9 ", "null"],  # Group 9
 ]
 
 autostarts = [
@@ -71,11 +82,12 @@ autostarts = [
     "dex -ae qtile",
     "dunst",
     "xsettingsd",
+    "sh ~/.conky/conky-startup.sh",
 ]
 
-if qtile_core == 'x11':
+if qtile_core == "x11":
     autostarts.extend(["picom"])
-elif qtile_core == 'wayland':
+elif qtile_core == "wayland":
     autostarts.extend([""])
 
 
@@ -86,21 +98,21 @@ autostarts_running = []
 def send_to_proper_workspace(client):
     for gsub in group_app_subscriptions:
         client_info = client.info()
-        client_name = client_info['name'].lower()
-        client_wm_class = str(client_info['wm_class'][1]).lower()
+        client_name = client_info["name"].lower()
+        client_wm_class = str(client_info["wm_class"][1]).lower()
         if client_name in gsub:
-            blab('Match name: %s' % client_name)
+            blab("Match name: %s" % client_name)
             client.togroup(gsub[0], switch_group=True)
         elif client_wm_class in gsub:
             blab("Match class: %s" % client_wm_class)
             client.togroup(gsub[0], switch_group=True)
         else:
-            blab('No match for name: %s ' % client_name)
+            blab("No match for name: %s " % client_name)
 
 
 @hook.subscribe.client_new
 def dialogs(window):
-    if (window.window.get_wm_type == 'dialog'): 
+    if window.window.get_wm_type == "dialog":
         window.floating = True
         lazy.window.center(window)
 
@@ -118,6 +130,5 @@ def autostart():
 @hook.subscribe.shutdown
 def cleanup():
     for p in autostarts_running:
-        blab('Killing process: '+str(p.args)+' (pid '+str(p.pid)+') ...')
+        blab("Killing process: " + str(p.args) + " (pid " + str(p.pid) + ") ...")
         p.kill()
-
