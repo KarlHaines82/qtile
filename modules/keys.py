@@ -2,7 +2,7 @@ from libqtile.config import Key
 from libqtile.lazy import lazy
 
 mod = "mod4"
-editor = "neovide-lunarvim"
+editor = "neovide"
 terminal = "alacritty"
 aterminal = "kitty"
 dmenu = "rofi -modi run,window,combi -combi run,window -show combi"

@@ -7,7 +7,7 @@ from libqtile.config import Screen
 from libqtile import bar, qtile
 from libqtile.lazy import lazy
 from qtile_extras import widget
-from qtile_extras.widget import lazify_imports, statusnotifier
+from qtile_extras.widget import statusnotifier
 from qtile_extras.widget.decorations import PowerLineDecoration as powerline_decor
 
 # from modules.mywidgets import CapsNumWidget
@@ -88,6 +88,8 @@ top_widgets = [
 if qtile_core == "wayland":
     top_widgets.append(
         statusnotifier.StatusNotifier(
+            **powerline_right,
+            # background=theme_colors[9],
             icon_size=22,
             icon_path="/usr/share/icons/breeze-dark",
             margin_x=6,
@@ -96,6 +98,8 @@ if qtile_core == "wayland":
 elif qtile_core == "x11":
     top_widgets.append(
         widget.Systray(
+            **powerline_right,
+            # background=theme_colors[9],
             icon_size=22,
             icon_path="/usr/share/icons/breeze-dark",
             margin_x=6,
@@ -105,14 +109,20 @@ elif qtile_core == "x11":
 
 top_widgets.extend(
     [
-        widget.UPowerWidget(),
+        widget.UPowerWidget(
+            **powerline_right,
+            background=theme_colors[6],
+        ),
         # CapsNumWidget(),
         widget.Clock(
+            **powerline_right,
+            background=theme_colors[3],
             format="%I:%M%p",
             fontsize=18,
             align="center",
         ),
         widget.TextBox(
+            **powerline_right, 
             fontsize=16,
             margin_y=4,
             mouse_callbacks={"Button1": lazy.shutdown()},
@@ -143,11 +153,6 @@ screens = [
                 # ),
                 widget.TaskList(**powerline_left),
                 widget.TextBox(width=1, **powerline_right),
-                widget.Wlan(
-                    **powerline_right,
-                    format="{essid} {percent:2.02%}",
-                    background=theme_colors[3],
-                ),
                 widget.Image(
                     filename=expanduser("~/.config/qtile/icons/cpu.svg"),
                     height=14,
@@ -180,12 +185,12 @@ screens = [
                     width=60,
                     margin_x=10,
                 ),
-                widget.TextBox(**ssep, **powerline_right),
+                widget.TextBox(width=1),
             ],
             26,
             background=theme_colors[0],
         ),
-        wallpaper_mode="stretch",
+        wallpaper_mode="fill",
         wallpaper=expanduser("~/.config/qtile/wallpaper/vaderwallpaper.jpg"),
     )
 ]

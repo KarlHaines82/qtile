@@ -82,7 +82,7 @@ autostarts = [
     "dex -ae qtile",
     "dunst",
     "xsettingsd",
-    "sh ~/.conky/conky-startup.sh",
+    "~/.conky/conky-startup.sh",
 ]
 
 if qtile_core == "x11":
